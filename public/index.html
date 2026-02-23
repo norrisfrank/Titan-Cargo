@@ -1956,6 +1956,70 @@
       fill: none;
       stroke-width: 2;
     }
+
+    /* ── QUOTE MODAL ── */
+    #quote-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(13, 46, 66, 0.85);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #quote-modal.active {
+      display: flex;
+    }
+
+    .quote-card {
+      background: #fff;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
+    }
+
+    .quote-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--body);
+    }
+
+    .quote-close:hover {
+      color: var(--heading);
+    }
+
+    .quote-card h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 8px;
+    }
+
+    .quote-card p {
+      color: var(--body);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .quote-full {
+      grid-column: span 2;
+    }
   </style>
 </head>
 
@@ -2024,7 +2088,7 @@
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </a>
-          <a href="#contact" class="btn-outline">Get a Quote</a>
+          <a href="#" class="btn-outline" onclick="showQuote(); return false;">Get a Quote</a>
         </div>
         <div class="hero-stats">
           <div class="stat-item">
@@ -2164,8 +2228,8 @@
           <h3>Road Freight</h3>
           <p>Nationwide road haulage across Kenya and transboundary corridors with a modern fleet of flatbeds,
             tautliners, and specialized cargo vehicles.</p>
-          <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round"
-              stroke-linejoin="round">
+          <a href="#" class="service-link" onclick="showQuote(); return false;">Learn more <svg viewBox="0 0 24 24"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg></a>
         </div>
@@ -2179,8 +2243,8 @@
           <h3>Cross-Border Logistics</h3>
           <p>Seamless customs clearance and transit documentation for Uganda, Tanzania, Rwanda, DRC, Ethiopia, and 10+
             additional African markets.</p>
-          <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round"
-              stroke-linejoin="round">
+          <a href="#" class="service-link" onclick="showQuote(); return false;">Learn more <svg viewBox="0 0 24 24"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg></a>
         </div>
@@ -2410,7 +2474,7 @@
           <p class="section-sub">Our 340+ vehicle fleet is maintained to EU standards, GPS-tracked, and deployed
             strategically across key trade routes.</p>
           <div style="margin-top: 32px;">
-            <a href="#contact" class="btn-primary" style="text-decoration:none;">
+            <a href="#" class="btn-primary" style="text-decoration:none;" onclick="showQuote(); return false;">
               Request Fleet Allocation
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -2603,14 +2667,14 @@
       <h2>Ready to Move Cargo at Scale?</h2>
       <p>Get a custom logistics solution built around your business. Our team responds within 2 business hours.</p>
       <div class="cta-band-actions">
-        <a href="mailto:logistics@titancargo.co.ke" class="btn-white">
+        <a href="#" class="btn-white" onclick="showQuote(); return false;">
           Request a Quote
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </a>
-        <a href="tel:+254700000000" class="btn-outline">Call: +254 700 000 000</a>
+        <a href="tel:+254757494163" class="btn-outline">Call: +254 757 494 163</a>
       </div>
     </div>
   </section>
@@ -2677,7 +2741,7 @@
               <path
                 d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.36 11.83 19.79 19.79 0 011.21 3.19 2 2 0 013.18 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.64a16 16 0 006.29 6.29l1.62-1.62a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
             </svg>
-            <span>+254 700 000 000</span>
+            <span>+254 757 494 163</span>
           </div>
           <div class="footer-contact-item">
             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -2813,6 +2877,48 @@
     </div>
   </div>
 
+  <!-- QUOTE MODAL -->
+  <div id="quote-modal">
+    <div class="quote-card">
+      <button class="quote-close" onclick="hideQuote()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <h2>Request a Quote</h2>
+      <p>Fill in your shipment details and we'll get back to you with a competitive rate.</p>
+
+      <div class="quote-grid">
+        <div class="form-group">
+          <label class="form-label">Origin City</label>
+          <input type="text" id="quote-origin" class="form-input" placeholder="e.g. Nairobi">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destination City</label>
+          <input type="text" id="quote-dest" class="form-input" placeholder="e.g. Mombasa">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight (kg)</label>
+          <input type="number" id="quote-weight" class="form-input" placeholder="e.g. 500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cargo Type</label>
+          <select id="quote-type" class="form-input" style="padding: 12px 16px;">
+            <option value="general">General Cargo</option>
+            <option value="hazardous">Hazardous</option>
+            <option value="cold">Cold Chain</option>
+            <option value="oversized">Oversized</option>
+          </select>
+        </div>
+        <div class="form-group quote-full">
+          <label class="form-label">Your Email</label>
+          <input type="email" id="quote-email" class="form-input" placeholder="you@company.com">
+        </div>
+        <button class="btn-login quote-full" onclick="submitQuote()">Submit Quote Request</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Navbar scroll effect
     const navbar = document.getElementById('navbar');
@@ -2833,6 +2939,25 @@
       el.classList.add('active');
       document.getElementById('feature-title').textContent = title;
       document.getElementById('feature-desc').textContent = desc;
+    }
+
+    // Quote Modal
+    function showQuote() {
+      document.getElementById('quote-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function hideQuote() {
+      document.getElementById('quote-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    function submitQuote() {
+      const email = document.getElementById('quote-email').value;
+      if (!email || !document.getElementById('quote-origin').value || !document.getElementById('quote-dest').value) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      alert('Quote request received! Our team will contact you at ' + email + ' within 2 business hours.');
+      hideQuote();
     }
 
     // Login page
