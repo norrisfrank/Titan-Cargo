@@ -75,3 +75,14 @@ CREATE TABLE IF NOT EXISTS vehicles (
   status     TEXT        NOT NULL, -- operating | grounded
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS quote_requests (
+  id             BIGSERIAL PRIMARY KEY,
+  origin         TEXT        NOT NULL,
+  destination    TEXT        NOT NULL,
+  weight_kg      NUMERIC(12,2),
+  cargo_type     TEXT        NOT NULL,
+  contact_email  TEXT        NOT NULL,
+  status         TEXT        NOT NULL DEFAULT 'PENDING',
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

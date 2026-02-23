@@ -9,6 +9,7 @@ const bookingsRoutes = require('./routes/bookings');
 const tripsRoutes = require('./routes/trips');
 const vehiclesRoutes = require('./routes/vehicles');
 const adminRoutes = require('./routes/admin');
+const quotesRoutes = require('./routes/quotes');
 const { requireAuth, requireRole } = require('./middleware/auth');
 
 const app = express();
@@ -28,8 +29,8 @@ if (frontendOrigin) {
 }
 app.use(express.json());
 
- const publicDir = path.join(__dirname, '..', 'public');
- app.use(express.static(publicDir));
+const publicDir = path.join(__dirname, '..', 'public');
+app.use(express.static(publicDir));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -41,6 +42,7 @@ app.use('/api/dashboard', requireAuth, requireRole('ADMIN', 'OPERATIONS'), dashb
 app.use('/api/bookings', requireAuth, bookingsRoutes);
 app.use('/api/trips', requireAuth, requireRole('ADMIN', 'OPERATIONS'), tripsRoutes);
 app.use('/api/vehicles', requireAuth, requireRole('ADMIN'), vehiclesRoutes);
+app.use('/api/quotes', quotesRoutes);
 
 // 404 handler
 app.use((req, res, next) => {

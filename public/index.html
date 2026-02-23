@@ -2951,13 +2951,28 @@
       document.body.style.overflow = '';
     }
     function submitQuote() {
+      const origin = document.getElementById('quote-origin').value;
+      const destination = document.getElementById('quote-dest').value;
+      const weight = document.getElementById('quote-weight').value;
+      const type = document.getElementById('quote-type').value;
       const email = document.getElementById('quote-email').value;
-      if (!email || !document.getElementById('quote-origin').value || !document.getElementById('quote-dest').value) {
+
+      if (!email || !origin || !destination) {
         alert('Please fill in all required fields.');
         return;
       }
-      alert('Quote request received! Our team will contact you at ' + email + ' within 2 business hours.');
-      hideQuote();
+
+      apiCall('/quotes', {
+        method: 'POST',
+        body: JSON.stringify({ origin, destination, weight, type, email })
+      })
+        .then(resp => {
+          alert('Quote request received! Our team will contact you at ' + email + ' within 2 business hours.');
+          hideQuote();
+        })
+        .catch(err => {
+          alert('Error submitting quote request: ' + err.message);
+        });
     }
 
     // Login page
