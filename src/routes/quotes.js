@@ -30,11 +30,15 @@ router.post('/', async (req, res) => {
         res.status(201).json({
             success: true,
             message: 'Quote request submitted successfully',
-            requestId: result[0].id
+            requestId: result.rows[0].id
         });
     } catch (err) {
         console.error('Error submitting quote request:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        // If it's a "relation does not exist" error, give a more helpful hint
+        const isTableMissing = err.message && err.message.includes('relation "quote_requests" does not exist');
+        res.status(500).json({
+            error: isTableMissing ? 'Database table quote_requests is missing. Please run the SQL initialization.' : 'Internal server error'
+        });
     }
 });
 
