@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titan Cargo - Login</title>
+  <style>
+    :root {
+      --primary: #1a5276;
+      --primary-light: #2980b9;
+      --secondary: #2c3e50;
+      --accent: #f39c12;
+      --light: #ecf0f1;
+      --dark: #2c3e50;
+      --error: #e74c3c;
+      --success: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-image: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 1000px;
+      min-height: 540px;
+      overflow: hidden;
+    }
+
+    .info-side {
+      background: radial-gradient(circle at top left, var(--accent), var(--primary));
+      color: #ffffff;
+      padding: 40px 36px;
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background-color: #ffffff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-weight: 800;
+    }
+
+    .welcome-text {
+      margin: 40px 0;
+    }
+
+    .welcome-text h1 {
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .welcome-text p {
+      font-size: 14px;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .info-footer {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .form-side {
+      width: 60%;
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .form-header h2 {
+      font-size: 28px;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+
+    form {
+      width: 100%;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: 1px solid #dcdde1;
+      font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+    }
+
+    .error-text {
+      display: none;
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 4px;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .forgot-password {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .forgot-password:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 6px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.05s, box-shadow 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(26, 82, 118, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(26, 82, 118, 0.35);
+    }
+
+    .switch-form {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .switch-form a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .switch-form a:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .status-banner {
+      margin-bottom: 10px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    .status-banner.error {
+      color: var(--error);
+    }
+
+    .status-banner.success {
+      color: var(--success);
+    }
+
+    .password-strength {
+      display: none;
+      margin-top: 6px;
+    }
+
+    .strength-meter {
+      height: 4px;
+      background-color: #dcdde1;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .strength-meter-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--error);
+      transition: width 0.2s, background-color 0.2s;
+    }
+
+    .strength-text {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #7f8c8d;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        max-width: 500px;
+      }
+
+      .info-side,
+      .form-side {
+        width: 100%;
+      }
+
+      .info-side {
+        padding-bottom: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="info-side">
+      <div>
+        <div class="logo">
+          <div class="logo-icon">TC</div>
+          <span>Titan Cargo</span>
+        </div>
+        <div class="welcome-text">
+          <h1>Secure Logistics Operations Portal</h1>
+          <p>
+            Sign in to manage cargo movements, monitor fleet status, and track
+            mission‑critical shipments across the Titan Cargo network.
+          </p>
+        </div>
+      </div>
+      <div class="info-footer">
+        <p>&copy; <span id="year"></span> Titan Cargo. All rights reserved.</p>
+      </div>
+    </div>
+
+    <div class="form-side">
+      <div class="status-banner" id="status-banner"></div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-header">
+          <h2>Sign in</h2>
+          <p>Use your Titan Cargo administrator credentials</p>
+        </div>
+
+        <div class="form-group">
+          <label for="login-email">Email address</label>
+          <input
+            type="email"
+            id="login-email"
+            class="form-input"
+            autocomplete="email"
+            required
+          />
+          <div class="error-text">Please enter a valid email address.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            class="form-input"
+            autocomplete="current-password"
+            required
+          />
+          <div class="error-text">Please enter your password.</div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember-me" />
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign in</button>
+
+        <div class="switch-form">
+          <p>
+            New to Titan Cargo?
+            <a href="#" id="show-signup">Create an account</a>
+          </p>
+        </div>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signup-form" style="display: none;">
+        <div class="form-header">
+          <h2>Create Titan Cargo account</h2>
+          <p>Provision a new administrator profile</p>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-name">Full name</label>
+          <input
+            type="text"
+            id="signup-name"
+            class="form-input"
+            autocomplete="name"
+            required
+          />
+          <div class="error-text">Please enter your full name.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email">Work email</label>
+          <input
+            type="email"
+            id="signup-email"
+            class="form-input"
+            autocomplete="email"
+            required
+          />
+          <div class="error-text">Please enter a valid email address.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Create password</label>
+          <input
+            type="password"
+            id="signup-password"
+            class="form-input"
+            autocomplete="new-password"
+            required
+          />
+          <div class="password-strength">
+            <div class="strength-meter">
+              <div class="strength-meter-fill"></div>
+            </div>
+            <div class="strength-text">
+              Password strength: <span id="strength-value">Weak</span>
+            </div>
+          </div>
+          <div class="error-text">Password must be at least 8 characters.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-confirm">Confirm password</label>
+          <input
+            type="password"
+            id="signup-confirm"
+            class="form-input"
+            autocomplete="new-password"
+            required
+          />
+          <div class="error-text">Passwords do not match.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create account</button>
+
+        <div class="switch-form">
+          <p>
+            Already have an account?
+            <a href="#" id="show-login">Back to sign in</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3000/api';
+
+    function setYear() {
+      const el = document.getElementById('year');
+      if (el) el.textContent = new Date().getFullYear();
+    }
+
+    function showStatus(message, type = 'error') {
+      const banner = document.getElementById('status-banner');
+      if (!banner) return;
+      banner.textContent = message || '';
+      banner.className = 'status-banner ' + (type === 'success' ? 'success' : 'error');
+    }
+
+    async function apiCall(endpoint, options = {}) {
+      const url = `${API_BASE_URL}${endpoint}`;
+      const token = localStorage.getItem('authToken');
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(options.headers || {}),
+        },
+        ...options,
+      };
+
+      const res = await fetch(url, config);
+      if (!res.ok) {
+        let message = `Request failed with status ${res.status}`;
+        try {
+          const body = await res.json();
+          if (body && body.error) message = body.error;
+        } catch (_) {}
+        throw new Error(message);
+      }
+      return res.json();
+    }
+
+    async function performLogin(email, password) {
+      const resp = await apiCall('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (resp && resp.token) {
+        localStorage.setItem('authToken', resp.token);
+        localStorage.setItem('currentUser', JSON.stringify(resp.user));
+        return true;
+      }
+      return false;
+    }
+
+    async function performRegister(name, email, password) {
+      const resp = await apiCall('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (resp && resp.token) {
+        localStorage.setItem('authToken', resp.token);
+        localStorage.setItem('currentUser', JSON.stringify(resp.user));
+        return true;
+      }
+      return false;
+    }
+
+    function validateEmail(email) {
+      const re =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    }
+
+    function setupToggle() {
+      const showSignup = document.getElementById('show-signup');
+      const showLogin = document.getElementById('show-login');
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+
+      if (showSignup) {
+        showSignup.addEventListener('click', (e) => {
+          e.preventDefault();
+          loginForm.style.display = 'none';
+          signupForm.style.display = 'block';
+          showStatus('');
+        });
+      }
+
+      if (showLogin) {
+        showLogin.addEventListener('click', (e) => {
+          e.preventDefault();
+          signupForm.style.display = 'none';
+          loginForm.style.display = 'block';
+          showStatus('');
+        });
+      }
+    }
+
+    function setupPasswordStrength() {
+      const passwordInput = document.getElementById('signup-password');
+      const strengthContainer = document.querySelector('.password-strength');
+      const strengthFill = document.querySelector('.strength-meter-fill');
+      const strengthValue = document.getElementById('strength-value');
+
+      if (!passwordInput || !strengthContainer || !strengthFill || !strengthValue) return;
+
+      passwordInput.addEventListener('focus', () => {
+        strengthContainer.style.display = 'block';
+      });
+
+      passwordInput.addEventListener('input', () => {
+        const val = passwordInput.value || '';
+        let strength = 0;
+
+        if (val.length >= 8) strength += 25;
+        if (/[a-z]/.test(val) && /[A-Z]/.test(val)) strength += 25;
+        if (/\d/.test(val)) strength += 25;
+        if (/[^a-zA-Z\d]/.test(val)) strength += 25;
+
+        strengthFill.style.width = `${strength}%`;
+
+        if (strength <= 25) {
+          strengthFill.style.backgroundColor = '#e74c3c';
+          strengthValue.textContent = 'Weak';
+        } else if (strength <= 50) {
+          strengthFill.style.backgroundColor = '#f39c12';
+          strengthValue.textContent = 'Fair';
+        } else if (strength <= 75) {
+          strengthFill.style.backgroundColor = '#3498db';
+          strengthValue.textContent = 'Good';
+        } else {
+          strengthFill.style.backgroundColor = '#27ae60';
+          strengthValue.textContent = 'Strong';
+        }
+      });
+    }
+
+    function setupLoginForm() {
+      const form = document.getElementById('login-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showStatus('');
+
+        const emailEl = document.getElementById('login-email');
+        const passwordEl = document.getElementById('login-password');
+
+        let valid = true;
+
+        if (!validateEmail(emailEl.value)) {
+          emailEl.classList.add('error');
+          emailEl.nextElementSibling.style.display = 'block';
+          valid = false;
+        } else {
+          emailEl.classList.remove('error');
+          emailEl.nextElementSibling.style.display = 'none';
+        }
+
+        if (!passwordEl.value) {
+          passwordEl.classList.add('error');
+          passwordEl.nextElementSibling.style.display = 'block';
+          valid = false;
+        } else {
+          passwordEl.classList.remove('error');
+          passwordEl.nextElementSibling.style.display = 'none';
+        }
+
+        if (!valid) return;
+
+        try {
+          const ok = await performLogin(emailEl.value.trim(), passwordEl.value);
+          if (ok) {
+            showStatus('Login successful. Redirecting to dashboard…', 'success');
+            setTimeout(() => {
+              try {
+                const stored = JSON.parse(localStorage.getItem('currentUser') || '{}');
+                const displayName = stored.name || emailEl.value.trim();
+                sessionStorage.setItem('titanShowWelcome', '1');
+                sessionStorage.setItem('titanWelcomeName', displayName);
+              } catch (_) {}
+              window.location.href = 'Titan.html';
+            }, 700);
+          } else {
+            showStatus('Unable to login. Please check your credentials.', 'error');
+          }
+        } catch (err) {
+          showStatus(err.message || 'Login failed.', 'error');
+        }
+      });
+    }
+
+    function setupSignupForm() {
+      const form = document.getElementById('signup-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showStatus('');
+
+        const nameEl = document.getElementById('signup-name');
+        const emailEl = document.getElementById('signup-email');
+        const passwordEl = document.getElementById('signup-password');
+        const confirmEl = document.getElementById('signup-confirm');
+
+        let valid = true;
+
+        if (!nameEl.value || nameEl.value.trim().length < 2) {
+          nameEl.classList.add('error');
+          nameEl.nextElementSibling.style.display = 'block';
+          valid = false;
+        } else {
+          nameEl.classList.remove('error');
+          nameEl.nextElementSibling.style.display = 'none';
+        }
+
+        if (!validateEmail(emailEl.value)) {
+          emailEl.classList.add('error');
+          emailEl.nextElementSibling.style.display = 'block';
+          valid = false;
+        } else {
+          emailEl.classList.remove('error');
+          emailEl.nextElementSibling.style.display = 'none';
+        }
+
+        if (!passwordEl.value || passwordEl.value.length < 8) {
+          passwordEl.classList.add('error');
+          // Keep strength UI visible if invalid
+          passwordEl.nextElementSibling.nextElementSibling.style.display = 'block';
+          valid = false;
+        } else {
+          passwordEl.classList.remove('error');
+          passwordEl.nextElementSibling.nextElementSibling.style.display = 'none';
+        }
+
+        if (passwordEl.value !== confirmEl.value) {
+          confirmEl.classList.add('error');
+          confirmEl.nextElementSibling.style.display = 'block';
+          valid = false;
+        } else {
+          confirmEl.classList.remove('error');
+          confirmEl.nextElementSibling.style.display = 'none';
+        }
+
+        if (!valid) return;
+
+        try {
+          const ok = await performRegister(
+            nameEl.value.trim(),
+            emailEl.value.trim(),
+            passwordEl.value
+          );
+          if (ok) {
+            showStatus('Account created. Redirecting to dashboard…', 'success');
+            setTimeout(() => {
+              try {
+                const displayName = nameEl.value.trim() || emailEl.value.trim();
+                sessionStorage.setItem('titanShowWelcome', '1');
+                sessionStorage.setItem('titanWelcomeName', displayName);
+              } catch (_) {}
+              window.location.href = 'Titan.html';
+            }, 800);
+          } else {
+            showStatus('Unable to create account. Please try again.', 'error');
+          }
+        } catch (err) {
+          showStatus(err.message || 'Registration failed.', 'error');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setYear();
+      setupToggle();
+      setupPasswordStrength();
+      setupLoginForm();
+      setupSignupForm();
+    });
+  </script>
+</body>
+</html>

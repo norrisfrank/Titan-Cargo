@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titan Cargo — Secure Logistics Operations Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
+<style>
+  :root {
+    --ocean-deep: #1a4f72;
+    --ocean-mid: #1f5f8b;
+    --ocean-light: #2f6f95;
+    --amber: #f5a623;
+    --amber-muted: #d4891e;
+    --olive: #6f7f63;
+    --navy-cta: #1f4f6f;
+    --navy-hover: #173d57;
+    --surface: #f2f2f2;
+    --surface-white: #ffffff;
+    --heading: #1c2b36;
+    --body: #5a6b77;
+    --border: #dce4ea;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--heading);
+    background: #fff;
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; }
+
+  /* ── UTILITY ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--navy-cta); color: #fff;
+    padding: 14px 32px; border-radius: 6px;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(31,79,111,0.25);
+  }
+  .btn-primary:hover { background: var(--navy-hover); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(31,79,111,0.35); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: #fff;
+    padding: 13px 30px; border-radius: 6px; border: 1.5px solid rgba(255,255,255,0.5);
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem;
+    text-decoration: none; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+  /* Fade-in animation */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 0 24px;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(26,79,114,0.97);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.18);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-badge {
+    width: 42px; height: 42px; border-radius: 8px;
+    background: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.85rem;
+    color: var(--ocean-mid); letter-spacing: -0.5px;
+  }
+  .logo-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; color: #fff; }
+  .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-actions { display: flex; align-items: center; gap: 12px; }
+  .nav-login {
+    color: rgba(255,255,255,0.85); font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; padding: 8px 20px; border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.35);
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-login:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0e3a54 0%, #1f5f8b 45%, #2f6f95 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-grid-line {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-accent {
+    position: absolute; right: -120px; top: -80px;
+    width: 680px; height: 680px; border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(245,166,35,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-accent-2 {
+    position: absolute; left: -60px; bottom: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(47,111,149,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    padding-top: 72px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3);
+    color: var(--amber); font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 4px;
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+  .hero h1 {
+    font-size: clamp(2.6rem, 5vw, 4.2rem); font-weight: 800;
+    line-height: 1.07; color: #fff; margin-bottom: 24px;
+  }
+  .hero h1 span { color: var(--amber); display: block; }
+  .hero-sub {
+    color: rgba(255,255,255,0.72); font-size: 1.05rem; line-height: 1.7;
+    margin-bottom: 36px; max-width: 480px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    margin-top: 56px; background: rgba(255,255,255,0.12); border-radius: 12px; overflow: hidden;
+  }
+  .stat-item {
+    background: rgba(255,255,255,0.06); padding: 28px 20px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: #fff;
+    line-height: 1;
+  }
+  .stat-num span { color: var(--amber); }
+  .stat-label { color: rgba(255,255,255,0.6); font-size: 0.78rem; margin-top: 6px; letter-spacing: 0.5px; }
+
+  /* Hero right visual */
+  .hero-visual {
+    position: relative; display: flex; flex-direction: column; gap: 16px;
+  }
+  .cargo-card {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px; padding: 20px 24px; backdrop-filter: blur(8px);
+  }
+  .cargo-card-title { color: rgba(255,255,255,0.55); font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .cargo-route {
+    display: flex; align-items: center; gap: 12px;
+    color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem;
+  }
+  .route-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(245,166,35,0.6), rgba(245,166,35,0.1)); }
+  .route-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+  .cargo-meta { display: flex; gap: 24px; margin-top: 14px; }
+  .cargo-meta-item { display: flex; flex-direction: column; }
+  .cargo-meta-label { font-size: 0.7rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px; }
+  .cargo-meta-val { font-size: 0.9rem; color: #fff; font-weight: 500; margin-top: 3px; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+  }
+  .status-transit { background: rgba(245,166,35,0.2); color: var(--amber); }
+  .status-delivered { background: rgba(34,197,94,0.2); color: #4ade80; }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .status-transit .status-dot { background: var(--amber); }
+  .status-delivered .status-dot { background: #4ade80; }
+  .map-visual {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 20px; height: 200px;
+    position: relative; overflow: hidden; backdrop-filter: blur(8px);
+  }
+  .map-overlay-text { color: rgba(255,255,255,0.45); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+  .map-dots {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pulse-ring {
+    position: relative;
+    width: 16px; height: 16px;
+  }
+  .pulse-ring::before, .pulse-ring::after {
+    content: '';
+    position: absolute; inset: 0; border-radius: 50%;
+    background: var(--amber); opacity: 0.7;
+  }
+  .pulse-ring::after {
+    animation: pulse-out 2s ease-out infinite;
+    background: transparent;
+    border: 1.5px solid var(--amber);
+  }
+  @keyframes pulse-out {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+  .map-line-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--navy-cta); padding: 14px 0; overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .ticker-track {
+    display: flex; gap: 60px; white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+  }
+  .ticker-item {
+    display: flex; align-items: center; gap: 10px;
+    color: rgba(255,255,255,0.75); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.3px;
+  }
+  .ticker-item span { color: var(--amber); font-weight: 600; }
+  .ticker-sep { color: rgba(255,255,255,0.25); }
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 100px 0; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--ocean-mid); font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .section-label::before { content: ''; width: 28px; height: 2px; background: var(--amber); border-radius: 2px; }
+  .section-title { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; color: var(--heading); line-height: 1.15; }
+  .section-sub { color: var(--body); font-size: 1rem; line-height: 1.7; max-width: 520px; margin-top: 12px; }
+
+  /* ── SERVICES ── */
+  .services { background: var(--surface); }
+  .services-header { text-align: center; margin-bottom: 64px; }
+  .services-header .section-sub { margin: 12px auto 0; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(31,79,111,0.1);
+  }
+  .service-card {
+    background: #fff; padding: 44px 36px;
+    transition: background 0.3s;
+    cursor: pointer; position: relative;
+  }
+  .service-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: linear-gradient(90deg, var(--ocean-mid), var(--amber));
+    transform: scaleX(0); transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-card:hover { background: #f8fbfe; }
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--ocean-mid), var(--ocean-light));
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+  }
+  .service-icon svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 1.8; }
+  .service-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--heading); margin-bottom: 10px; }
+  .service-card p { font-size: 0.88rem; line-height: 1.65; color: var(--body); }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--ocean-mid); font-size: 0.82rem; font-weight: 600;
+    text-decoration: none; margin-top: 20px;
+    transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 10px; }
+  .service-link svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .about-visual {
+    position: relative; border-radius: 16px; overflow: visible;
+  }
+  .about-img-main {
+    width: 100%; border-radius: 16px; overflow: hidden;
+    background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-light));
+    height: 420px; position: relative;
+  }
+  .about-img-overlay {
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .about-img-content {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px; padding: 40px;
+  }
+  .about-truck-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(245,166,35,0.2); border: 2px solid rgba(245,166,35,0.4);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-truck-icon svg { width: 40px; height: 40px; stroke: var(--amber); stroke-width: 1.5; fill: none; }
+  .about-img-text { color: rgba(255,255,255,0.7); font-size: 0.85rem; text-align: center; }
+  .about-badge {
+    position: absolute; bottom: -20px; right: -20px;
+    background: var(--amber); color: #fff;
+    border-radius: 12px; padding: 20px 24px; text-align: center;
+    box-shadow: 0 8px 32px rgba(245,166,35,0.35);
+  }
+  .about-badge-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; }
+  .about-badge-text { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85; }
+  .about-pillars { display: flex; flex-direction: column; gap: 20px; margin-top: 36px; }
+  .pillar {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 24px; background: var(--surface); border-radius: 10px;
+    border-left: 3px solid var(--ocean-mid);
+    transition: transform 0.2s;
+  }
+  .pillar:hover { transform: translateX(4px); }
+  .pillar-icon { width: 36px; height: 36px; flex-shrink: 0; }
+  .pillar-icon svg { width: 36px; height: 36px; stroke: var(--ocean-mid); fill: none; stroke-width: 1.8; }
+  .pillar h4 { font-size: 0.95rem; font-weight: 700; color: var(--heading); margin-bottom: 4px; }
+  .pillar p { font-size: 0.83rem; color: var(--body); line-height: 1.55; }
+
+  /* ── OPERATIONS ── */
+  .operations { background: linear-gradient(135deg, #0e3a54, #1f5f8b); position: relative; overflow: hidden; }
+  .operations::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .operations-inner { position: relative; z-index: 1; }
+  .operations-header { text-align: center; margin-bottom: 64px; }
+  .operations-header .section-label { color: var(--amber); }
+  .operations-header .section-title { color: #fff; }
+  .operations-header .section-sub { color: rgba(255,255,255,0.65); margin: 12px auto 0; }
+  .ops-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .ops-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 32px 24px; text-align: center;
+    transition: background 0.3s, transform 0.3s;
+    backdrop-filter: blur(6px);
+  }
+  .ops-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+  .ops-icon {
+    width: 60px; height: 60px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(245,166,35,0.25), rgba(245,166,35,0.1));
+    border: 1px solid rgba(245,166,35,0.3);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
+  }
+  .ops-icon svg { width: 28px; height: 28px; stroke: var(--amber); fill: none; stroke-width: 1.8; }
+  .ops-card h3 { color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+  .ops-card p { color: rgba(255,255,255,0.6); font-size: 0.83rem; line-height: 1.6; }
+  .ops-num {
+    font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800;
+    color: var(--amber); margin-bottom: 4px;
+  }
+  .ops-num-label { color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; }
+
+  /* ── FLEET ── */
+  .fleet-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    margin-bottom: 60px;
+  }
+  .fleet-item-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .fleet-card {
+    background: var(--surface); border-radius: 12px; padding: 28px 22px;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .fleet-card:hover { box-shadow: 0 8px 32px rgba(31,79,111,0.12); transform: translateY(-3px); }
+  .fleet-card-icon {
+    width: 44px; height: 44px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--ocean-mid), var(--ocean-light));
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+  }
+  .fleet-card-icon svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 1.8; }
+  .fleet-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--heading); margin-bottom: 6px; }
+  .fleet-card p { font-size: 0.8rem; color: var(--body); line-height: 1.55; }
+  .fleet-count { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--ocean-mid); margin-bottom: 2px; }
+  .fleet-count-label { font-size: 0.72rem; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── FEATURES ── */
+  .features { background: var(--surface); }
+  .features-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .feature-list { display: flex; flex-direction: column; gap: 4px; }
+  .feature-item {
+    display: flex; gap: 16px; align-items: flex-start; padding: 20px;
+    border-radius: 10px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .feature-item.active { background: #fff; box-shadow: 0 4px 20px rgba(31,79,111,0.1); }
+  .feature-num {
+    width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    background: var(--surface); display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem;
+    color: var(--body); border: 1px solid var(--border);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .feature-item.active .feature-num { background: var(--ocean-mid); color: #fff; border-color: var(--ocean-mid); }
+  .feature-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--heading); margin-bottom: 6px; }
+  .feature-item p { font-size: 0.82rem; color: var(--body); line-height: 1.55; }
+  .features-display {
+    background: linear-gradient(135deg, var(--ocean-mid), var(--ocean-light));
+    border-radius: 20px; padding: 48px 40px; min-height: 400px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    position: relative; overflow: hidden;
+  }
+  .features-display::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: rgba(245,166,35,0.15);
+  }
+  .features-display h3 { color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; position: relative; z-index: 1; }
+  .features-display p { color: rgba(255,255,255,0.72); font-size: 0.9rem; line-height: 1.65; position: relative; z-index: 1; }
+  .features-display-icon {
+    position: absolute; top: 40px; right: 40px;
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;
+  }
+  .features-display-icon svg { width: 36px; height: 36px; stroke: var(--amber); fill: none; stroke-width: 1.5; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    margin-top: 56px;
+  }
+  .testi-card {
+    background: #fff; border-radius: 14px; padding: 32px 28px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 16px rgba(31,79,111,0.06);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .testi-card:hover { box-shadow: 0 8px 32px rgba(31,79,111,0.12); transform: translateY(-4px); }
+  .testi-quote {
+    font-size: 2.5rem; line-height: 1; color: var(--amber); font-family: 'Syne', sans-serif; font-weight: 800;
+    margin-bottom: 16px;
+  }
+  .testi-card p { font-size: 0.9rem; line-height: 1.7; color: var(--body); margin-bottom: 24px; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--ocean-mid), var(--ocean-light));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 700; color: #fff; font-size: 0.9rem;
+  }
+  .testi-name { font-weight: 700; font-size: 0.9rem; color: var(--heading); }
+  .testi-role { font-size: 0.78rem; color: var(--body); }
+  .testi-stars { color: var(--amber); font-size: 0.8rem; margin-bottom: 6px; }
+
+  /* ── PARTNERS ── */
+  .partners { background: var(--surface); padding: 60px 0; }
+  .partners-label { text-align: center; color: var(--body); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 36px; }
+  .partners-track {
+    display: flex; gap: 56px; align-items: center; justify-content: center; flex-wrap: wrap;
+  }
+  .partner-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
+    color: #c0cdd5; letter-spacing: -0.5px;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .partner-logo:hover { color: var(--ocean-mid); }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    background: linear-gradient(135deg, var(--amber), var(--amber-muted), var(--olive));
+    padding: 80px 0; text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-band::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M0 0h80v80H0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .cta-band-inner { position: relative; z-index: 1; }
+  .cta-band h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: #fff; margin-bottom: 16px; }
+  .cta-band p { color: rgba(255,255,255,0.82); font-size: 1rem; max-width: 480px; margin: 0 auto 36px; line-height: 1.7; }
+  .cta-band-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-white {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fff; color: var(--navy-cta);
+    padding: 14px 32px; border-radius: 6px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+    text-decoration: none; transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .btn-white:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0d2e42; color: rgba(255,255,255,0.75);
+    padding: 72px 0 0;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-brand .logo-text { color: #fff; font-size: 1.2rem; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; color: rgba(255,255,255,0.55); margin: 16px 0 24px; max-width: 280px; }
+  .footer-social { display: flex; gap: 10px; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .social-btn:hover { background: rgba(255,255,255,0.15); }
+  .social-btn svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.7); fill: none; stroke-width: 1.8; }
+  .footer-col h4 { font-family: 'Syne', sans-serif; font-weight: 700; color: #fff; font-size: 0.9rem; margin-bottom: 20px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { color: rgba(255,255,255,0.55); font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--amber); }
+  .footer-contact-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+  .footer-contact-item svg { width: 16px; height: 16px; stroke: var(--amber); fill: none; stroke-width: 1.8; flex-shrink: 0; margin-top: 2px; }
+  .footer-contact-item span { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+  .footer-bottom {
+    padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+  }
+  .footer-bottom p { font-size: 0.8rem; color: rgba(255,255,255,0.35); }
+  .footer-bottom a { color: rgba(255,255,255,0.45); font-size: 0.8rem; text-decoration: none; transition: color 0.2s; }
+  .footer-bottom a:hover { color: rgba(255,255,255,0.7); }
+  .footer-legal { display: flex; gap: 24px; }
+
+  /* ── LOGIN PAGE ── */
+  #login-page {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: #f2f2f2;
+  }
+  #login-page.active { display: flex; }
+  .login-split { display: grid; grid-template-columns: 1fr 1fr; width: 100%; height: 100%; }
+  .login-brand {
+    background: linear-gradient(135deg, #0e3a54, #1f5f8b, #2f6f95);
+    padding: 48px; display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .login-brand::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .login-brand-accent {
+    position: absolute; bottom: -80px; right: -80px;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.2), transparent 70%);
+  }
+  .login-brand-content { position: relative; z-index: 1; }
+  .login-brand h2 {
+    font-size: 2.4rem; font-weight: 800; color: #fff; line-height: 1.15;
+    margin: 48px 0 16px;
+  }
+  .login-brand p { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.7; max-width: 320px; }
+  .login-features { position: relative; z-index: 1; }
+  .login-feature-item {
+    display: flex; gap: 12px; align-items: center; margin-bottom: 14px;
+  }
+  .login-feature-check {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(245,166,35,0.2); border: 1px solid rgba(245,166,35,0.4);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .login-feature-check svg { width: 10px; height: 10px; stroke: var(--amber); fill: none; stroke-width: 2.5; }
+  .login-feature-item span { color: rgba(255,255,255,0.75); font-size: 0.85rem; }
+  .login-brand-footer { position: relative; z-index: 1; color: rgba(255,255,255,0.35); font-size: 0.78rem; }
+  .login-form-panel {
+    background: #fff; display: flex; align-items: center; justify-content: center; padding: 48px;
+  }
+  .login-form-inner { width: 100%; max-width: 420px; }
+  .login-form-inner h1 { font-size: 2rem; font-weight: 800; color: var(--heading); margin-bottom: 8px; }
+  .login-form-inner .sub { color: var(--body); font-size: 0.88rem; margin-bottom: 36px; }
+  .form-group { margin-bottom: 20px; }
+  .form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--heading); margin-bottom: 8px; }
+  .form-input {
+    width: 100%; padding: 13px 16px; border-radius: 6px;
+    border: 1.5px solid var(--border); background: var(--surface);
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--heading);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
+  .form-input:focus { border-color: var(--ocean-mid); box-shadow: 0 0 0 3px rgba(31,95,139,0.12); background: #fff; }
+  .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .remember { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .remember input { accent-color: var(--navy-cta); width: 14px; height: 14px; }
+  .remember span { font-size: 0.82rem; color: var(--body); }
+  .forgot { font-size: 0.82rem; color: var(--ocean-mid); text-decoration: none; font-weight: 600; }
+  .forgot:hover { text-decoration: underline; }
+  .btn-login {
+    width: 100%; padding: 14px; background: var(--navy-cta); color: #fff; border: none;
+    border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+  }
+  .btn-login:hover { background: var(--navy-hover); transform: translateY(-1px); }
+  .login-divider { text-align: center; color: var(--body); font-size: 0.82rem; margin: 20px 0; position: relative; }
+  .login-divider::before, .login-divider::after {
+    content: ''; position: absolute; top: 50%; width: calc(50% - 60px); height: 1px;
+    background: var(--border);
+  }
+  .login-divider::before { left: 0; }
+  .login-divider::after { right: 0; }
+  .login-register { text-align: center; font-size: 0.85rem; color: var(--body); }
+  .login-register a { color: var(--ocean-mid); font-weight: 600; text-decoration: none; }
+  .login-register a:hover { text-decoration: underline; }
+  .login-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--body); font-size: 0.82rem; text-decoration: none; margin-bottom: 32px;
+    cursor: pointer; background: none; border: none; font-family: inherit;
+    transition: color 0.2s;
+  }
+  .login-back:hover { color: var(--heading); }
+  .login-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { grid-template-columns: 1fr; gap: 48px; padding-top: 100px; }
+    .hero-visual { display: none; }
+    .hero-stats { grid-template-columns: repeat(3, 1fr); }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .services-grid .service-card:last-child { grid-column: span 2; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-badge { display: none; }
+    .ops-grid { grid-template-columns: repeat(2, 1fr); }
+    .fleet-grid { grid-template-columns: 1fr; }
+    .features-inner { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .login-split { grid-template-columns: 1fr; }
+    .login-brand { display: none; }
+    .login-form-panel { padding: 32px 24px; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 70px 0; }
+    .services-grid { grid-template-columns: 1fr; }
+    .services-grid .service-card:last-child { grid-column: span 1; }
+    .ops-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: 1fr; gap: 2px; }
+    .fleet-item-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 12px; }
+  }
+
+  /* Mobile nav overlay */
+  .mobile-nav {
+    display: none; position: fixed; inset: 0; z-index: 900;
+    background: rgba(14,58,84,0.97); backdrop-filter: blur(12px);
+    flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    color: rgba(255,255,255,0.85); font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1.4rem; text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--amber); }
+  .mobile-nav-close { position: absolute; top: 24px; right: 24px; cursor: pointer; }
+  .mobile-nav-close svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; }
+</style>
+</head>
+<body x-data="{ mobileOpen: false }">
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" :class="{ open: mobileOpen }">
+  <button class="mobile-nav-close" @click="mobileOpen = false">
+    <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+  </button>
+  <a href="#services" @click="mobileOpen = false">Services</a>
+  <a href="#about" @click="mobileOpen = false">About</a>
+  <a href="#fleet" @click="mobileOpen = false">Fleet</a>
+  <a href="#testimonials" @click="mobileOpen = false">Clients</a>
+  <a href="#contact" @click="mobileOpen = false">Contact</a>
+  <a href="#" onclick="showLogin()" style="color: var(--amber);">Portal Login</a>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-badge">TC</div>
+      <span class="logo-text">Titan Cargo</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#fleet">Fleet</a></li>
+      <li><a href="#features">Technology</a></li>
+      <li><a href="#testimonials">Clients</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="nav-login" onclick="showLogin(); return false;">Admin Portal</a>
+      <div class="hamburger" @click="mobileOpen = true">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-line"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-accent-2"></div>
+  <div class="hero-content">
+    <div class="fade-up">
+      <div class="hero-eyebrow">East Africa's Premier Logistics Network</div>
+      <h1>
+        Cargo That Moves
+        <span>Without Limits.</span>
+      </h1>
+      <p class="hero-sub">
+        From Nairobi to the port of Mombasa — and across 15 African nations — Titan Cargo delivers mission-critical shipments with precision, security, and speed.
+      </p>
+      <div class="hero-actions">
+        <a href="#services" class="btn-primary">
+          Explore Services
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="btn-outline">Get a Quote</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">15<span>+</span></div>
+          <div class="stat-label">Countries Served</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">340<span>+</span></div>
+          <div class="stat-label">Fleet Vehicles</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">99<span>%</span></div>
+          <div class="stat-label">On-Time Delivery</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual fade-up" style="transition-delay: 0.2s;">
+      <div class="cargo-card">
+        <div class="cargo-card-title">Live Shipment Tracking</div>
+        <div class="cargo-route">
+          <span>NBO</span>
+          <div class="route-dot"></div>
+          <div class="route-line"></div>
+          <div class="route-dot"></div>
+          <span>MBA</span>
+        </div>
+        <div class="cargo-meta">
+          <div class="cargo-meta-item">
+            <span class="cargo-meta-label">Cargo ID</span>
+            <span class="cargo-meta-val">TC-2024-08841</span>
+          </div>
+          <div class="cargo-meta-item">
+            <span class="cargo-meta-label">Weight</span>
+            <span class="cargo-meta-val">14,200 kg</span>
+          </div>
+          <div class="cargo-meta-item">
+            <span class="cargo-meta-label">Status</span>
+            <div class="status-badge status-transit"><span class="status-dot"></span>In Transit</div>
+          </div>
+        </div>
+      </div>
+      <div class="cargo-card">
+        <div class="cargo-card-title">Cross-Border Dispatch</div>
+        <div class="cargo-route">
+          <span>NBO</span>
+          <div class="route-dot"></div>
+          <div class="route-line"></div>
+          <div class="route-dot"></div>
+          <span>KLA</span>
+        </div>
+        <div class="cargo-meta">
+          <div class="cargo-meta-item">
+            <span class="cargo-meta-label">Cargo ID</span>
+            <span class="cargo-meta-val">TC-2024-08797</span>
+          </div>
+          <div class="cargo-meta-item">
+            <span class="cargo-meta-label">Weight</span>
+            <span class="cargo-meta-val">8,450 kg</span>
+          </div>
+          <div class="cargo-meta-item">
+            <span class="cargo-meta-label">Status</span>
+            <div class="status-badge status-delivered"><span class="status-dot"></span>Delivered</div>
+          </div>
+        </div>
+      </div>
+      <div class="map-visual">
+        <div class="map-overlay-text">Active Network — East Africa</div>
+        <div class="map-dots">
+          <div class="pulse-ring"></div>
+        </div>
+        <svg class="map-line-svg" viewBox="0 0 400 200">
+          <defs>
+            <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="rgba(245,166,35,0.7)"/>
+            </marker>
+          </defs>
+          <path d="M 60 140 Q 180 60 340 100" stroke="rgba(245,166,35,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+          <path d="M 60 140 Q 120 80 200 100" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none" stroke-dasharray="4,4"/>
+          <circle cx="60" cy="140" r="4" fill="rgba(245,166,35,0.7)"/>
+          <circle cx="340" cy="100" r="4" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="200" cy="100" r="3" fill="rgba(255,255,255,0.35)"/>
+          <text x="50" y="158" font-size="9" fill="rgba(255,255,255,0.5)" font-family="DM Sans">Nairobi</text>
+          <text x="326" y="118" font-size="9" fill="rgba(255,255,255,0.5)" font-family="DM Sans">Mombasa</text>
+          <text x="188" y="95" font-size="9" fill="rgba(255,255,255,0.35)" font-family="DM Sans">Kampala</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">🚛 <span>Nairobi → Mombasa</span> — 24hr Express</span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">✅ ISO 9001:2015 <span>Certified Logistics</span></span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">📦 Cross-border: <span>15+ African Nations</span></span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">🔒 <span>GPS-Tracked</span> Every Shipment</span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">⏱ <span>99% On-Time</span> Delivery Rate</span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">🚛 <span>Nairobi → Mombasa</span> — 24hr Express</span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">✅ ISO 9001:2015 <span>Certified Logistics</span></span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">📦 Cross-border: <span>15+ African Nations</span></span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">🔒 <span>GPS-Tracked</span> Every Shipment</span>
+    <span class="ticker-sep">•</span>
+    <span class="ticker-item">⏱ <span>99% On-Time</span> Delivery Rate</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-header fade-up">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">End-to-End Logistics Solutions</h2>
+      <p class="section-sub">Comprehensive cargo services engineered for reliability across East and Central Africa's most demanding trade corridors.</p>
+    </div>
+    <div class="services-grid fade-up" style="transition-delay: 0.15s;">
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <h3>Road Freight</h3>
+        <p>Nationwide road haulage across Kenya and transboundary corridors with a modern fleet of flatbeds, tautliners, and specialized cargo vehicles.</p>
+        <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>Cross-Border Logistics</h3>
+        <p>Seamless customs clearance and transit documentation for Uganda, Tanzania, Rwanda, DRC, Ethiopia, and 10+ additional African markets.</p>
+        <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        </div>
+        <h3>Cold Chain Transport</h3>
+        <p>Temperature-controlled reefer trucks for pharmaceutical, perishable, and sensitive cargo requiring precise environment management.</p>
+        <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        </div>
+        <h3>Warehousing</h3>
+        <p>Bonded and open warehousing solutions at Nairobi's ICD and Mombasa's port vicinity with 24/7 security and inventory management.</p>
+        <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        </div>
+        <h3>Customs Brokerage</h3>
+        <p>Expert customs documentation, duty calculation, and KRA compliance. We handle all clearance protocols so your cargo clears without delays.</p>
+        <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        </div>
+        <h3>Express Delivery</h3>
+        <p>Same-day and next-day delivery within Nairobi metro and time-definite options on major intercity corridors with live tracking.</p>
+        <a href="#contact" class="service-link">Learn more <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual fade-up">
+        <div class="about-img-main">
+          <div class="about-img-overlay"></div>
+          <div class="about-img-content">
+            <div class="about-truck-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <div class="about-img-text">340+ fleet vehicles in active operation across East Africa</div>
+            <div style="display:flex; gap: 24px; margin-top: 20px;">
+              <div style="text-align:center">
+                <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:#fff">18</div>
+                <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px">Years</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:#fff">3K+</div>
+                <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px">Clients</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:#fff">15</div>
+                <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px">Nations</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-num">18</div>
+          <div class="about-badge-text">Years of<br>Excellence</div>
+        </div>
+      </div>
+      <div class="fade-up" style="transition-delay: 0.15s;">
+        <div class="section-label">Who We Are</div>
+        <h2 class="section-title">Kenya's Most Trusted Cargo Partner</h2>
+        <p class="section-sub" style="margin-top: 16px;">
+          Founded in Nairobi in 2006, Titan Cargo has grown from a local haulier to East Africa's most operationally reliable logistics network — trusted by governments, multinationals, and SMEs alike.
+        </p>
+        <div class="about-pillars">
+          <div class="pillar">
+            <div class="pillar-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div>
+              <h4>Safety First Operations</h4>
+              <p>Every driver is trained, every vehicle inspected, every shipment insured. We operate to international HSSE standards on every route.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
+            <div>
+              <h4>Real-Time Intelligence</h4>
+              <p>Proprietary TMS platform providing live GPS tracking, ETA predictions, and cargo condition monitoring for every consignment.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div>
+              <h4>Dedicated Account Teams</h4>
+              <p>Every client gets a dedicated logistics manager available 24/7, fluent in your supply chain and ready to act at a moment's notice.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONS -->
+<section class="operations">
+  <div class="container operations-inner">
+    <div class="operations-header fade-up">
+      <div class="section-label">By the Numbers</div>
+      <h2 class="section-title">Operational Scale & Reach</h2>
+      <p class="section-sub">Infrastructure that supports the continent's most demanding logistics operations, built for growth.</p>
+    </div>
+    <div class="ops-grid fade-up" style="transition-delay: 0.1s;">
+      <div class="ops-card">
+        <div class="ops-num">340<span style="color:var(--amber)">+</span></div>
+        <div class="ops-num-label">Fleet Vehicles</div>
+        <div class="ops-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <h3>Modern Fleet</h3>
+        <p>Long-haul trucks, curtainsiders, flatbeds, tippers, lowloaders, and specialized cargo vehicles.</p>
+      </div>
+      <div class="ops-card">
+        <div class="ops-num">15<span style="color:var(--amber)">+</span></div>
+        <div class="ops-num-label">African Nations</div>
+        <div class="ops-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <h3>Pan-African Reach</h3>
+        <p>Active trade corridors into Uganda, Tanzania, Rwanda, DRC, Ethiopia, South Sudan, and beyond.</p>
+      </div>
+      <div class="ops-card">
+        <div class="ops-num">6</div>
+        <div class="ops-num-label">Regional Depots</div>
+        <div class="ops-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
+        <h3>Strategic Depots</h3>
+        <p>Facilities in Nairobi, Mombasa, Eldoret, Kisumu, Nakuru, and Malaba border crossing.</p>
+      </div>
+      <div class="ops-card">
+        <div class="ops-num">24<span style="color:var(--amber)">/7</span></div>
+        <div class="ops-num-label">Operational Hours</div>
+        <div class="ops-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+        <h3>Always On</h3>
+        <p>Round-the-clock operations center with live visibility into every vehicle, shipment, and border crossing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLEET -->
+<section id="fleet">
+  <div class="container">
+    <div class="fleet-grid">
+      <div class="fade-up">
+        <div class="section-label">Our Fleet</div>
+        <h2 class="section-title">Built for Africa's Roads</h2>
+        <p class="section-sub">Our 340+ vehicle fleet is maintained to EU standards, GPS-tracked, and deployed strategically across key trade routes.</p>
+        <div style="margin-top: 32px;">
+          <a href="#contact" class="btn-primary" style="text-decoration:none;">
+            Request Fleet Allocation
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="fleet-item-grid fade-up" style="transition-delay: 0.15s;">
+        <div class="fleet-card">
+          <div class="fleet-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+          <div class="fleet-count">120+</div>
+          <div class="fleet-count-label">Long-Haul Trucks</div>
+          <p class="fleet-card p" style="font-size:0.8rem;color:var(--body);margin-top:8px;">34–40 ton rated tractor-trailers for bulk cargo</p>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+          <div class="fleet-count">60+</div>
+          <div class="fleet-count-label">Curtainsiders</div>
+          <p class="fleet-card p" style="font-size:0.8rem;color:var(--body);margin-top:8px;">General cargo with fast side-loading access</p>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+          <div class="fleet-count">40+</div>
+          <div class="fleet-count-label">Reefer Trucks</div>
+          <p class="fleet-card p" style="font-size:0.8rem;color:var(--body);margin-top:8px;">-20°C to +20°C for pharma and perishables</p>
+        </div>
+        <div class="fleet-card">
+          <div class="fleet-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
+          <div class="fleet-count">120+</div>
+          <div class="fleet-count-label">Light Commercials</div>
+          <p class="fleet-card p" style="font-size:0.8rem;color:var(--body);margin-top:8px;">Pickups and panel vans for urban delivery</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES / TECHNOLOGY -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-inner">
+      <div class="fade-up">
+        <div class="section-label">Technology</div>
+        <h2 class="section-title">Powered by Intelligent Logistics</h2>
+        <p class="section-sub">Our proprietary TMS platform gives you real-time command over every shipment, every mile, every time.</p>
+        <div class="feature-list" style="margin-top: 36px;">
+          <div class="feature-item active" onclick="setFeature(this, 'Real-Time GPS Tracking', 'Every vehicle in our fleet broadcasts live location data, enabling our operations center and your team to monitor shipments with full visibility — including estimated arrival times, route deviations, and geofence alerts.')">
+            <div class="feature-num">01</div>
+            <div>
+              <h4>Real-Time GPS Tracking</h4>
+              <p>Live location data on every vehicle with ETA predictions and geofence alerts.</p>
+            </div>
+          </div>
+          <div class="feature-item" onclick="setFeature(this, 'Digital Documentation', 'Paperless PODs, digital waybills, and cloud-stored customs documents eliminate delays at checkpoints. All documents are accessible via the Titan Cargo portal within seconds of upload.')">
+            <div class="feature-num">02</div>
+            <div>
+              <h4>Digital Documentation</h4>
+              <p>Paperless PODs, waybills, and customs documents in the cloud.</p>
+            </div>
+          </div>
+          <div class="feature-item" onclick="setFeature(this, 'Cargo Security Protocol', 'CCTV-monitored depots, sealed cargo tracking seals, biometric driver verification, and cargo insurance underwritten by leading Kenyan insurers — every shipment fully protected.')">
+            <div class="feature-num">03</div>
+            <div>
+              <h4>Cargo Security Protocol</h4>
+              <p>Sealed tracking, biometric verification, and insured cargo handling.</p>
+            </div>
+          </div>
+          <div class="feature-item" onclick="setFeature(this, 'Analytics & Reporting', 'Monthly performance dashboards covering delivery KPIs, cost-per-mile analytics, route efficiency scoring, and carbon footprint estimates — all exportable to Excel or integrated via API.')">
+            <div class="feature-num">04</div>
+            <div>
+              <h4>Analytics & Reporting</h4>
+              <p>Delivery KPIs, route analytics, and cost reporting — all in one dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="features-display fade-up" style="transition-delay: 0.15s;" id="features-display">
+        <div class="features-display-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3 id="feature-title">Real-Time GPS Tracking</h3>
+        <p id="feature-desc">Every vehicle in our fleet broadcasts live location data, enabling our operations center and your team to monitor shipments with full visibility — including estimated arrival times, route deviations, and geofence alerts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="fade-up" style="text-align:center; margin-bottom: 16px;">
+      <div class="section-label" style="justify-content:center;">Client Voices</div>
+      <h2 class="section-title" style="text-align:center;">Trusted by Leading Organizations</h2>
+      <p class="section-sub" style="margin: 12px auto 0; text-align:center;">From FMCG multinationals to government agencies — here's what our clients say about Titan Cargo.</p>
+    </div>
+    <div class="testimonials-grid fade-up" style="transition-delay: 0.1s;">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p>Titan Cargo handles all our cross-border shipments to Uganda and Tanzania. Their customs knowledge and driver professionalism is unmatched in the region. Our on-time delivery rate improved from 78% to 97% after switching.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AK</div>
+          <div>
+            <div class="testi-name">Amina Kimani</div>
+            <div class="testi-role">Supply Chain Director, AfriRetail Group</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p>As a pharmaceutical distributor, cold chain integrity is non-negotiable. Titan Cargo's reefer fleet and monitoring systems are world-class. We've never had a temperature excursion in three years of partnership.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JM</div>
+          <div>
+            <div class="testi-name">James Mwangi</div>
+            <div class="testi-role">Operations Manager, PharmEA Ltd</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"</div>
+        <p>The portal and real-time tracking transformed how we manage our logistics. Our team in Kampala can now see exactly where our cargo is at any moment. The support team is always responsive, even on weekends.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">PN</div>
+          <div>
+            <div class="testi-name">Peter Njoroge</div>
+            <div class="testi-role">CEO, BuildQuick Construction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<div class="partners">
+  <div class="container">
+    <p class="partners-label">Trusted by organizations across East Africa</p>
+    <div class="partners-track">
+      <span class="partner-logo">EABL</span>
+      <span class="partner-logo">KenGen</span>
+      <span class="partner-logo">SafariPharma</span>
+      <span class="partner-logo">NaivashaCo</span>
+      <span class="partner-logo">AfriRetail</span>
+      <span class="partner-logo">KPA</span>
+      <span class="partner-logo">BuildQuick</span>
+    </div>
+  </div>
+</div>
+
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <div class="container cta-band-inner">
+    <h2>Ready to Move Cargo at Scale?</h2>
+    <p>Get a custom logistics solution built around your business. Our team responds within 2 business hours.</p>
+    <div class="cta-band-actions">
+      <a href="mailto:logistics@titancargo.co.ke" class="btn-white">
+        Request a Quote
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="tel:+254700000000" class="btn-outline">Call: +254 700 000 000</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-badge">TC</div>
+          <span class="logo-text">Titan Cargo</span>
+        </a>
+        <p>East Africa's most reliable logistics partner. Nairobi-headquartered, continent-wide reach, world-class operations since 2006.</p>
+        <div class="footer-social">
+          <div class="social-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+          <div class="social-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></div>
+          <div class="social-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul class="footer-links">
+          <li><a href="#services">Road Freight</a></li>
+          <li><a href="#services">Cross-Border</a></li>
+          <li><a href="#services">Cold Chain</a></li>
+          <li><a href="#services">Warehousing</a></li>
+          <li><a href="#services">Customs Brokerage</a></li>
+          <li><a href="#services">Express Delivery</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#fleet">Our Fleet</a></li>
+          <li><a href="#features">Technology</a></li>
+          <li><a href="#testimonials">Clients</a></li>
+          <li><a href="#contact">Careers</a></li>
+          <li><a href="#contact">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Titan Cargo HQ, Westlands, Nairobi, Kenya</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.36 11.83 19.79 19.79 0 011.21 3.19 2 2 0 013.18 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.64a16 16 0 006.29 6.29l1.62-1.62a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span>+254 700 000 000</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>logistics@titancargo.co.ke</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Titan Cargo Limited. All rights reserved. Registered in Kenya.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="login-split">
+    <div class="login-brand">
+      <div class="login-brand-accent"></div>
+      <div class="login-brand-content">
+        <a href="#" class="logo" onclick="hideLogin(); return false;">
+          <div class="logo-badge">TC</div>
+          <span class="logo-text">Titan Cargo</span>
+        </a>
+        <h2>Secure Logistics Operations Portal</h2>
+        <p>Manage cargo movements, monitor fleet status, and track mission-critical shipments across the Titan Cargo network.</p>
+      </div>
+      <div class="login-features">
+        <div class="login-feature-item">
+          <div class="login-feature-check"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <span>Real-time shipment tracking dashboard</span>
+        </div>
+        <div class="login-feature-item">
+          <div class="login-feature-check"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <span>Fleet status & driver management</span>
+        </div>
+        <div class="login-feature-item">
+          <div class="login-feature-check"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <span>Digital documents & POD access</span>
+        </div>
+        <div class="login-feature-item">
+          <div class="login-feature-check"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+          <span>Analytics & performance reporting</span>
+        </div>
+      </div>
+      <div class="login-brand-footer">© 2026 Titan Cargo. All rights reserved.</div>
+    </div>
+    <div class="login-form-panel">
+      <div class="login-form-inner">
+        <div id="login-form">
+          <button class="login-back" onclick="hideLogin()">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to website
+          </button>
+          <h1>Sign in</h1>
+          <p class="sub">Use your Titan Cargo administrator credentials</p>
+          <div class="form-group">
+            <label class="form-label">Email address</label>
+            <input id="login-email" type="email" class="form-input" placeholder="you@titancargo.co.ke">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input id="login-password" type="password" class="form-input" placeholder="Enter your password">
+          </div>
+          <div class="form-row">
+            <label class="remember">
+              <input type="checkbox"> <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot">Forgot password?</a>
+          </div>
+          <button id="login-submit" class="btn-login">Sign in</button>
+          <div class="login-divider">or</div>
+          <p class="login-register">New to Titan Cargo? <a href="#" onclick="showSignupForm(); return false;">Create an account</a></p>
+          <p id="auth-status" class="sub" style="min-height:20px;"></p>
+        </div>
+        <div id="signup-form" style="display:none;">
+          <button class="login-back" onclick="showLoginForm()">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to sign in
+          </button>
+          <h1>Create account</h1>
+          <p class="sub">Provision a new Titan Cargo administrator profile</p>
+          <div class="form-group">
+            <label class="form-label">Full name</label>
+            <input id="signup-name" type="text" class="form-input" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Work email</label>
+            <input id="signup-email" type="email" class="form-input" placeholder="you@company.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input id="signup-password" type="password" class="form-input" placeholder="Create a password">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm password</label>
+            <input id="signup-confirm" type="password" class="form-input" placeholder="Repeat password">
+          </div>
+          <div class="form-row">
+            <label class="remember">
+              <input type="checkbox"> <span>I agree to the Terms</span>
+            </label>
+          </div>
+          <button id="signup-submit" class="btn-login">Create account</button>
+          <div class="login-divider">or</div>
+          <p class="login-register">Already have an account? <a href="#" onclick="showLoginForm(); return false;">Sign in</a></p>
+          <p id="signup-status" class="sub" style="min-height:20px;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // Intersection observer for fade-ups
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Feature tabs
+  function setFeature(el, title, desc) {
+    document.querySelectorAll('.feature-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('feature-title').textContent = title;
+    document.getElementById('feature-desc').textContent = desc;
+  }
+
+  // Login page
+  function showLogin() {
+    const p = document.getElementById('login-page');
+    p.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function hideLogin() {
+    const p = document.getElementById('login-page');
+    p.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function showSignupForm() {
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    if (loginForm && signupForm) {
+      loginForm.style.display = 'none';
+      signupForm.style.display = '';
+    }
+  }
+  function showLoginForm() {
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    if (loginForm && signupForm) {
+      signupForm.style.display = 'none';
+      loginForm.style.display = '';
+    }
+  }
+  function setStatus(message, type) {
+    const el = document.getElementById('auth-status');
+    if (el) {
+      el.textContent = message || '';
+      el.style.color = type === 'success' ? '#1f5f8b' : '#e74c3c';
+    }
+  }
+  async function apiCall(endpoint, options) {
+    const token = localStorage.getItem('authToken');
+    const res = await fetch(`/api${endpoint}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options && options.headers ? options.headers : {}),
+      },
+      ...(options || {}),
+    });
+    if (!res.ok) {
+      let msg = `Request failed (${res.status})`;
+      try {
+        const body = await res.json();
+        if (body && body.error) msg = body.error;
+      } catch (_) {}
+      throw new Error(msg);
+    }
+    return res.json();
+  }
+  async function performLogin(email, password) {
+    const resp = await apiCall('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    if (resp && resp.token) {
+      localStorage.setItem('authToken', resp.token);
+      localStorage.setItem('currentUser', JSON.stringify(resp.user));
+      return true;
+    }
+    return false;
+  }
+  async function performRegister(name, email, password) {
+    const resp = await apiCall('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, password }),
+    });
+    if (resp && resp.token) {
+      localStorage.setItem('authToken', resp.token);
+      localStorage.setItem('currentUser', JSON.stringify(resp.user));
+      return true;
+    }
+    return false;
+  }
+  function bindAuthForms() {
+    const loginBtn = document.getElementById('login-submit');
+    const signupBtn = document.getElementById('signup-submit');
+    if (loginBtn) {
+      loginBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        setStatus('');
+        const emailEl = document.getElementById('login-email');
+        const passEl = document.getElementById('login-password');
+        const email = (emailEl && emailEl.value || '').trim();
+        const password = passEl && passEl.value || '';
+        if (!email || !password) {
+          setStatus('Enter email and password');
+          return;
+        }
+        try {
+          const ok = await performLogin(email, password);
+          if (ok) {
+            setStatus('Login successful. Redirecting…', 'success');
+            try {
+              const stored = JSON.parse(localStorage.getItem('currentUser') || '{}');
+              const displayName = stored.name || email;
+              sessionStorage.setItem('titanShowWelcome', '1');
+              sessionStorage.setItem('titanWelcomeName', displayName);
+            } catch (_) {}
+            window.location.href = 'Titan.html';
+          } else {
+            setStatus('Unable to login');
+          }
+        } catch (err) {
+          setStatus(err.message || 'Login failed');
+        }
+      });
+    }
+    if (signupBtn) {
+      signupBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const nameEl = document.getElementById('signup-name');
+        const emailEl = document.getElementById('signup-email');
+        const passEl = document.getElementById('signup-password');
+        const confEl = document.getElementById('signup-confirm');
+        const name = (nameEl && nameEl.value || '').trim();
+        const email = (emailEl && emailEl.value || '').trim();
+        const password = passEl && passEl.value || '';
+        const confirm = confEl && confEl.value || '';
+        const statusEl = document.getElementById('signup-status');
+        if (statusEl) statusEl.textContent = '';
+        if (!name || !email || !password || password.length < 8 || password !== confirm) {
+          if (statusEl) statusEl.textContent = 'Check your details';
+          if (statusEl) statusEl.style.color = '#e74c3c';
+          return;
+        }
+        try {
+          const ok = await performRegister(name, email, password);
+          if (ok) {
+            if (statusEl) { statusEl.textContent = 'Account created. Redirecting…'; statusEl.style.color = '#1f5f8b'; }
+            try {
+              sessionStorage.setItem('titanShowWelcome', '1');
+              sessionStorage.setItem('titanWelcomeName', name || email);
+            } catch (_) {}
+            window.location.href = 'Titan.html';
+          } else {
+            if (statusEl) { statusEl.textContent = 'Unable to create account'; statusEl.style.color = '#e74c3c'; }
+          }
+        } catch (err) {
+          if (statusEl) { statusEl.textContent = err.message || 'Registration failed'; statusEl.style.color = '#e74c3c'; }
+        }
+      });
+    }
+  }
+  bindAuthForms();
+
+  // Init navbar scrolled on load
+  if (window.scrollY > 40) navbar.classList.add('scrolled');
+</script>
+</body>
+</html>
