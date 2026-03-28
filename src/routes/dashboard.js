@@ -47,4 +47,21 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+router.get('/recent', async (req, res) => {
+  try {
+    const [quotesResult, bookingsResult] = await Promise.all([
+      query('SELECT id, origin, destination, cargo_type as type, status, created_at FROM quote_requests ORDER BY created_at DESC LIMIT 5'),
+      query('SELECT id, airway_bill, origin, destination, status, created_at FROM bookings ORDER BY created_at DESC LIMIT 5')
+    ]);
+
+    return res.json({
+      quotes: quotesResult.rows,
+      transits: bookingsResult.rows
+    });
+  } catch (err) {
+    console.error('Dashboard recent error:', err);
+    return res.status(500).json({ error: 'Failed to load recent activity' });
+  }
+});
+
 module.exports = router;

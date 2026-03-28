@@ -1,0 +1,683 @@
+<html lang="en" data-theme="dark" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Titan Cargo // Logistics Projects</title>
+    
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" vid="7"></script>
+
+    <style vid="8">
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --radius-pill: 999px;
+            --radius-card: 32px;
+            --radius-widget: 24px;
+            
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-theme: background-color 0.6s var(--ease-out-expo), color 0.6s var(--ease-out-expo), border-color 0.6s var(--ease-out-expo);
+            --transition-element: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-base: #030407; 
+            --bg-surface-1: rgba(255, 255, 255, 0.02); 
+            --bg-surface-2: rgba(255, 255, 255, 0.05); 
+            --bg-surface-3: rgba(255, 255, 255, 0.1);  
+            
+            --bg-accent: #FFFFFF; 
+            --bg-accent-hover: #E0EDFF;
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-accent: #030407; 
+            --text-tech: rgba(255, 255, 255, 0.3);
+
+            --glow-color: 255, 255, 255;
+            --shader-core: #FFFFFF;
+            --shader-fringe: #4A88FF;
+            
+            --status-good: #4ade80;
+            --status-warn: #fbbf24;
+            --status-err: #f87171;
+        }
+
+        [data-theme="light"] {
+            --bg-base: #F5F7FA;
+            --bg-surface-1: rgba(255, 255, 255, 0.6);
+            --bg-surface-2: rgba(0, 0, 0, 0.04);
+            --bg-surface-3: rgba(0, 0, 0, 0.08);
+            
+            --bg-accent: #050608; 
+            --bg-accent-hover: #1A1E26;
+            
+            --text-primary: #050608;
+            --text-secondary: rgba(0, 0, 0, 0.5);
+            --text-accent: #FFFFFF;
+            --text-tech: rgba(0, 0, 0, 0.3);
+
+            --glow-color: 0, 0, 0;
+            --shader-core: #050608;
+            --shader-fringe: #8BA3CC;
+            
+            --status-good: #16a34a;
+            --status-warn: #d97706;
+            --status-err: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            transition: var(--transition-theme);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #webgl-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .font-tech {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass-panel {
+            background-color: var(--bg-surface-1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--bg-surface-2);
+            transition: var(--transition-theme);
+        }
+
+        .system-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-primary);
+            background: var(--bg-surface-2);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            transition: var(--transition-element);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background-color: var(--bg-surface-2);
+        }
+
+        .nav-item.active {
+            color: var(--text-primary);
+            background-color: var(--bg-surface-3);
+            font-weight: 600;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 50%;
+            width: 3px;
+            background-color: var(--text-primary);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .btn-surface {
+            background-color: var(--bg-surface-2);
+            color: var(--text-primary);
+            transition: var(--transition-element);
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-surface:hover {
+            background-color: var(--bg-surface-3);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background-color: var(--bg-accent);
+            color: var(--text-accent);
+            transition: var(--transition-element);
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 0 30px rgba(var(--glow-color), 0.15);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--bg-accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(var(--glow-color), 0.25);
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .project-card {
+            background-color: var(--bg-surface-1);
+            border: 1px solid var(--bg-surface-2);
+            transition: var(--transition-element);
+            cursor: pointer;
+        }
+        .project-card:hover {
+            background-color: var(--bg-surface-2);
+            border-color: var(--bg-surface-3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar-bg {
+            background-color: var(--bg-surface-2);
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--text-primary);
+            border-radius: 2px;
+            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body vid="9">
+
+    <div id="webgl-container" vid="10"></div>
+
+    <div class="relative z-10 w-full h-full flex p-6 gap-6" vid="11">
+        
+        <aside id="mobileSidebar" class="w-[280px] shrink-0 h-full hidden md:flex flex-col absolute md:relative z-50 bg-[var(--bg-base)] glass-panel rounded-[var(--radius-card)] p-8" vid="12">
+            <div class="flex flex-col items-start mb-10" vid="13">
+                <div class="system-badge mb-3" vid="14">TN.LOGISTICS</div>
+                <h1 class="text-3xl font-semibold tracking-tight leading-none" vid="15">Titan<br vid="16">Cargo.</h1>
+            </div>
+
+            <nav class="flex flex-col gap-1 flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2" vid="17">
+                <div class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest mt-2 mb-2 px-4" vid="18">MAIN</div>
+                <a href="dashboard.html" class="nav-item" vid="19">Dashboard</a>
+                <a href="configure.html" class="nav-item" vid="20">Configure</a>
+                <a href="projects.html" class="nav-item active" vid="21">Projects</a>
+                <a href="tasks.html" class="nav-item" vid="22">Tasks</a>
+                <a href="reports.html" class="nav-item" vid="23">Reports</a>
+
+                <div class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest mt-8 mb-2 px-4" vid="24">NETWORK</div>
+                <a href="teams.html" class="nav-item" vid="25">Team</a>
+                <a href="clients.html" class="nav-item" vid="26">Clients</a>
+                <a href="calendar.html" class="nav-item" vid="27">Calendar</a>
+
+                <div class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest mt-8 mb-2 px-4" vid="28">SYSTEM</div>
+                <a href="admin.html" class="nav-item" vid="29">Admin</a>
+                <a href="profile.html" class="nav-item" vid="30">Profile</a>
+                <a href="help.html" class="nav-item" vid="31">Help &amp; Support</a>
+            </nav>
+
+            <div class="mt-6 pt-6 border-t border-[var(--bg-surface-2)] flex flex-col gap-4" vid="32">
+                <a href="login.html" class="nav-item text-[var(--text-secondary)] hover:text-[var(--status-err)] -mx-2" vid="33">Logout</a>
+                <div class="font-tech text-[10px] text-[var(--text-tech)] leading-loose uppercase" vid="34">
+                    Titan Cargo.<br vid="35">All rights reserved.<br vid="36">Built by Norris Frank
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 h-full flex flex-col gap-6 min-w-0" vid="37">
+            <header class="h-16 shrink-0 glass-panel rounded-full px-6 flex items-center justify-between" vid="38">
+                <div class="flex items-center gap-4" vid="39">
+                    <div class="font-tech text-xs text-[var(--text-tech)] hidden md:block" vid="40">SYS.CORE // ON-LINE</div>
+                    <div class="w-1 h-4 bg-[var(--bg-surface-3)] hidden md:block" vid="41"></div>
+                    <h2 class="text-xl font-medium tracking-tight" vid="42">Active Projects</h2>
+                </div>
+                
+                <div class="flex items-center gap-4" vid="43">
+                    <div class="font-tech text-[11px] text-[var(--text-secondary)] px-3 py-1.5 bg-[var(--bg-surface-2)] rounded-full border border-[var(--bg-surface-3)]" vid="44">
+                        v03.01.44
+                    </div>
+                    <button class="btn-surface h-10 px-4 gap-2 text-sm font-medium" id="themeToggleBtn" vid="45">
+                        <i class="ph ph-moon text-lg" id="themeIcon" vid="46"></i>
+                        <span id="themeText" class="font-tech text-xs tracking-wider" vid="47">DARK</span>
+                    </button>
+                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" vid="48">
+                        NEW PROJECT <i class="ph ph-plus ml-2 text-base" vid="49"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-8 pb-6" vid="50">
+                
+                <div class="flex justify-between items-end" vid="51">
+                    <div vid="52">
+                        <p class="font-tech text-[11px] text-[var(--text-secondary)] uppercase tracking-[0.2em] mb-1" vid="53">Overview</p>
+                        <h3 class="text-3xl font-semibold tracking-tight" vid="54">Current Operations</h3>
+                    </div>
+                    <div class="flex gap-2" vid="55">
+                        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3" vid="56">
+                            <span class="text-xs text-[var(--text-secondary)]" vid="57">Sort:</span>
+                            <span class="text-sm font-medium" vid="58">Priority</span>
+                            <i class="ph ph-caret-down text-xs opacity-50" vid="59"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" vid="60">
+                    
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="61">
+                        <div class="flex justify-between items-start" vid="62">
+                            <div class="flex flex-col gap-1" vid="63">
+                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="64">PRJ-2281</span>
+                                <h4 class="text-lg font-semibold" vid="65">Nordic Expansion</h4>
+                            </div>
+                            <span class="system-badge text-[var(--status-good)] border border-[var(--status-good)] bg-transparent" vid="66">ON TRACK</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4" vid="67">
+                            <div vid="68">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="69">Origin</p>
+                                <p class="text-sm font-medium" vid="70">Oslo, Norway</p>
+                            </div>
+                            <div vid="71">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="72">Cargo Type</p>
+                                <p class="text-sm font-medium" vid="73">Renewable Infrastructure</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2" vid="74">
+                            <div class="flex justify-between items-end font-tech text-[10px]" vid="75">
+                                <span class="text-[var(--text-secondary)]" vid="76">TIMELINE PROGRESS</span>
+                                <span class="text-[var(--text-primary)]" vid="77">72%</span>
+                            </div>
+                            <div class="progress-bar-bg" vid="78">
+                                <div class="progress-bar-fill" style="width: 72%;" vid="79"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="80">
+                            <div class="flex -space-x-2" vid="81">
+                                <div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="82">JD</div>
+                                <div class="w-8 h-8 rounded-full bg-blue-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="83">KM</div>
+                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="84">+4</div>
+                            </div>
+                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="85"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="86">
+                        <div class="flex justify-between items-start" vid="87">
+                            <div class="flex flex-col gap-1" vid="88">
+                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="89">PRJ-2285</span>
+                                <h4 class="text-lg font-semibold" vid="90">Pacific Bridge</h4>
+                            </div>
+                            <span class="system-badge text-[var(--status-warn)] border border-[var(--status-warn)] bg-transparent" vid="91">DELAYED</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4" vid="92">
+                            <div vid="93">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="94">Origin</p>
+                                <p class="text-sm font-medium" vid="95">Busan, KR</p>
+                            </div>
+                            <div vid="96">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="97">Cargo Type</p>
+                                <p class="text-sm font-medium" vid="98">Semiconductors</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2" vid="99">
+                            <div class="flex justify-between items-end font-tech text-[10px]" vid="100">
+                                <span class="text-[var(--text-secondary)]" vid="101">TIMELINE PROGRESS</span>
+                                <span class="text-[var(--text-primary)]" vid="102">34%</span>
+                            </div>
+                            <div class="progress-bar-bg" vid="103">
+                                <div class="progress-bar-fill" style="width: 34%; background-color: var(--status-warn);" vid="104"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="105">
+                            <div class="flex -space-x-2" vid="106">
+                                <div class="w-8 h-8 rounded-full bg-indigo-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="107">LS</div>
+                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="108">+2</div>
+                            </div>
+                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="109"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="110">
+                        <div class="flex justify-between items-start" vid="111">
+                            <div class="flex flex-col gap-1" vid="112">
+                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="113">PRJ-2290</span>
+                                <h4 class="text-lg font-semibold" vid="114">Silk Road AI</h4>
+                            </div>
+                            <span class="system-badge text-[var(--status-good)] border border-[var(--status-good)] bg-transparent" vid="115">STABLE</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4" vid="116">
+                            <div vid="117">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="118">Origin</p>
+                                <p class="text-sm font-medium" vid="119">Shenzhen, CN</p>
+                            </div>
+                            <div vid="120">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="121">Cargo Type</p>
+                                <p class="text-sm font-medium" vid="122">Precision Robotics</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2" vid="123">
+                            <div class="flex justify-between items-end font-tech text-[10px]" vid="124">
+                                <span class="text-[var(--text-secondary)]" vid="125">TIMELINE PROGRESS</span>
+                                <span class="text-[var(--text-primary)]" vid="126">91%</span>
+                            </div>
+                            <div class="progress-bar-bg" vid="127">
+                                <div class="progress-bar-fill" style="width: 91%;" vid="128"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="129">
+                            <div class="flex -space-x-2" vid="130">
+                                <div class="w-8 h-8 rounded-full bg-emerald-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="131">AT</div>
+                                <div class="w-8 h-8 rounded-full bg-gray-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="132">RW</div>
+                            </div>
+                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="133"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="134">
+                        <div class="flex justify-between items-start" vid="135">
+                            <div class="flex flex-col gap-1" vid="136">
+                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="137">PRJ-2302</span>
+                                <h4 class="text-lg font-semibold" vid="138">Trans-African Rail</h4>
+                            </div>
+                            <span class="system-badge text-[var(--text-tech)] border border-[var(--bg-surface-3)] bg-transparent" vid="139">INITIALIZING</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4" vid="140">
+                            <div vid="141">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="142">Origin</p>
+                                <p class="text-sm font-medium" vid="143">Cape Town, ZA</p>
+                            </div>
+                            <div vid="144">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="145">Cargo Type</p>
+                                <p class="text-sm font-medium" vid="146">Industrial Rail</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2" vid="147">
+                            <div class="flex justify-between items-end font-tech text-[10px]" vid="148">
+                                <span class="text-[var(--text-secondary)]" vid="149">TIMELINE PROGRESS</span>
+                                <span class="text-[var(--text-primary)]" vid="150">8%</span>
+                            </div>
+                            <div class="progress-bar-bg" vid="151">
+                                <div class="progress-bar-fill" style="width: 8%;" vid="152"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="153">
+                            <div class="flex -space-x-2" vid="154">
+                                <div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="155">MF</div>
+                            </div>
+                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="156"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="157">
+                        <div class="flex justify-between items-start" vid="158">
+                            <div class="flex flex-col gap-1" vid="159">
+                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="160">PRJ-2311</span>
+                                <h4 class="text-lg font-semibold" vid="161">Andean Mining Sync</h4>
+                            </div>
+                            <span class="system-badge text-[var(--status-err)] border border-[var(--status-err)] bg-transparent" vid="162">CRITICAL</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4" vid="163">
+                            <div vid="164">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="165">Origin</p>
+                                <p class="text-sm font-medium" vid="166">Lima, PE</p>
+                            </div>
+                            <div vid="167">
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="168">Cargo Type</p>
+                                <p class="text-sm font-medium" vid="169">Raw Lithium</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2" vid="170">
+                            <div class="flex justify-between items-end font-tech text-[10px]" vid="171">
+                                <span class="text-[var(--text-secondary)]" vid="172">TIMELINE PROGRESS</span>
+                                <span class="text-[var(--text-primary)]" vid="173">45%</span>
+                            </div>
+                            <div class="progress-bar-bg" vid="174">
+                                <div class="progress-bar-fill" style="width: 45%; background-color: var(--status-err);" vid="175"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="176">
+                            <div class="flex -space-x-2" vid="177">
+                                <div class="w-8 h-8 rounded-full bg-red-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="178">HB</div>
+                                <div class="w-8 h-8 rounded-full bg-slate-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="179">TR</div>
+                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="180">+1</div>
+                            </div>
+                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="181"></i>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel border-dashed border-2 border-[var(--bg-surface-3)] rounded-[var(--radius-card)] p-8 flex flex-col items-center justify-center gap-4 group cursor-pointer" vid="182">
+                        <div class="w-12 h-12 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center group-hover:bg-[var(--bg-accent)] group-hover:text-[var(--text-accent)] transition-all" vid="183">
+                            <i class="ph ph-plus text-xl" vid="184"></i>
+                        </div>
+                        <p class="font-tech text-xs text-[var(--text-secondary)] uppercase tracking-widest" vid="185">Create New Operation</p>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script vid="186">
+        const themeBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const htmlElement = document.documentElement;
+
+        function getComputedColors() {
+            const styles = getComputedStyle(document.documentElement);
+            return {
+                core: new THREE.Color(styles.getPropertyValue('--shader-core').trim()),
+                fringe: new THREE.Color(styles.getPropertyValue('--shader-fringe').trim())
+            };
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeIcon.className = 'ph ph-moon text-lg';
+                themeText.textContent = 'DARK';
+            } else {
+                themeIcon.className = 'ph ph-sun text-lg';
+                themeText.textContent = 'LIGHT';
+            }
+
+            setTimeout(() => {
+                const colors = getComputedColors();
+                if (material) {
+                    material.uniforms.u_colorCore.value = colors.core;
+                    material.uniforms.u_colorFringe.value = colors.fringe;
+                    material.uniforms.u_isLightMode.value = newTheme === 'light' ? 1.0 : 0.0;
+                }
+            }, 50); 
+        });
+
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+        camera.position.z = 1;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const geometry = new THREE.PlaneGeometry(2, 2);
+
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            uniform float u_time;
+            uniform vec2 u_resolution;
+            uniform vec2 u_mouse;
+            uniform vec3 u_colorCore;
+            uniform vec3 u_colorFringe;
+            uniform float u_isLightMode;
+            varying vec2 vUv;
+
+            vec2 hash( vec2 p ) {
+                p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
+                return -1.0 + 2.0*fract(sin(p)*43758.5453123);
+            }
+            float noise( in vec2 p ) {
+                const float K1 = 0.366025404; 
+                const float K2 = 0.211324865; 
+                vec2 i = floor( p + (p.x+p.y)*K1 );
+                vec2 a = p - i + (i.x+i.y)*K2;
+                vec2 o = (a.x>a.y) ? vec2(1.0,0.0) : vec2(0.0,1.0);
+                vec2 b = a - o + K2;
+                vec2 c = a - 1.0 + 2.0*K2;
+                vec3 h = max( 0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );
+                vec3 n = h*h*h*h*vec3( dot(a,hash(i+0.0)), dot(b,hash(i+o)), dot(c,hash(i+1.0)));
+                return dot( n, vec3(70.0) );
+            }
+
+            float sdArc(vec2 p, vec2 center, float radius, float width, float warp) {
+                p.y += sin(p.x * 2.0 + u_time * 0.4) * warp;
+                p.x += noise(p * 1.5 + u_time * 0.1) * (warp * 0.8);
+                
+                float d = length(p - center) - radius;
+                return abs(d) - width;
+            }
+
+            void main() {
+                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+                vec2 st = uv;
+                st.x *= u_resolution.x / u_resolution.y;
+                
+                vec2 mouseOffset = (u_mouse - 0.5) * 0.05;
+                st += mouseOffset;
+
+                vec2 center = vec2(0.8, 0.4);
+                
+                float d1 = sdArc(st, center, 1.2, 0.02, 0.15);
+                float d2 = sdArc(st, center, 1.25, 0.06, 0.2);
+                
+                float coreGlow = exp(-d1 * 25.0);
+                float fringeGlow = exp(-d2 * 10.0);
+                
+                float wash = smoothstep(1.5, -0.5, st.x) * 0.2;
+
+                vec3 finalColor = vec3(0.0);
+                finalColor += u_colorCore * coreGlow;
+                finalColor += u_colorFringe * fringeGlow;
+                finalColor += u_colorFringe * wash * (sin(u_time * 0.5) * 0.2 + 0.8);
+
+                float alpha = clamp(coreGlow + fringeGlow + wash, 0.0, 1.0);
+                finalColor = vec3(1.0) - exp(-finalColor * 1.5);
+                
+                if(u_isLightMode > 0.5) {
+                    alpha = clamp((coreGlow * 1.2 + fringeGlow + wash * 0.3), 0.0, 0.4); 
+                }
+
+                alpha *= smoothstep(0.0, 0.2, uv.x) * smoothstep(1.0, 0.8, uv.x);
+                alpha *= smoothstep(0.0, 0.2, uv.y) * smoothstep(1.0, 0.8, uv.y);
+
+                gl_FragColor = vec4(finalColor, alpha * 0.7);
+            }
+        `;
+
+        const initialColors = getComputedColors();
+        
+        const material = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms: {
+                u_time: { value: 0.0 },
+                u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
+                u_colorCore: { value: initialColors.core },
+                u_colorFringe: { value: initialColors.fringe },
+                u_isLightMode: { value: 0.0 }
+            },
+            transparent: true,
+            blending: THREE.NormalBlending 
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        let targetMouse = new THREE.Vector2(0.5, 0.5);
+        document.addEventListener('mousemove', (e) => {
+            targetMouse.x = e.clientX / window.innerWidth;
+            targetMouse.y = 1.0 - (e.clientY / window.innerHeight); 
+        });
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            material.uniforms.u_time.value = elapsedTime;
+            material.uniforms.u_mouse.value.lerp(targetMouse, 0.02);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            material.uniforms.u_resolution.value.set(width, height);
+        });
+    </script>
+
+</body></html>

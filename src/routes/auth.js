@@ -40,6 +40,8 @@ router.post('/register', async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+    const role = req.body.role === 'ADMIN' ? 'ADMIN' : 'CLIENT';
+
     const insert = await query(
       `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision)
        VALUES ($1,$2,$3,$4,$5,$6,$7)
@@ -48,7 +50,7 @@ router.post('/register', async (req, res) => {
         name,
         email,
         passwordHash,
-        'ADMIN',
+        role,
         'https://randomuser.me/api/portraits/men/44.jpg',
         'Logistics Management, Supply Chain Optimization, Secure Transport, Team Leadership, Data Analytics, Client Relations',
         'To transform Titan Cargo into the most trusted, innovative, and secure logistics partner in the world, delivering excellence for every client and every shipment.',

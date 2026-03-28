@@ -86,3 +86,23 @@ CREATE TABLE IF NOT EXISTS quote_requests (
   status         TEXT        NOT NULL DEFAULT 'PENDING',
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS tracking_history (
+  id               BIGSERIAL PRIMARY KEY,
+  quote_request_id BIGINT      REFERENCES quote_requests(id) ON DELETE CASCADE,
+  tracking_number  TEXT,
+  status           TEXT,
+  location         TEXT,
+  timestamp        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+  id                  BIGSERIAL PRIMARY KEY,
+  quote_request_id    BIGINT      REFERENCES quote_requests(id) ON DELETE CASCADE,
+  merchant_request_id TEXT,
+  checkout_request_id TEXT,
+  amount              NUMERIC(14,2) NOT NULL,
+  phone_number        TEXT        NOT NULL,
+  status              TEXT        NOT NULL DEFAULT 'PENDING',
+  created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

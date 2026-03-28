@@ -1,0 +1,478 @@
+<html lang="en" data-theme="dark" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Titan Cargo // Reports &amp; Analytics</title>
+    
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" vid="7"></script>
+
+    <style vid="8">
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --radius-pill: 999px;
+            --radius-card: 32px;
+            --radius-widget: 24px;
+            
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-theme: background-color 0.6s var(--ease-out-expo), color 0.6s var(--ease-out-expo), border-color 0.6s var(--ease-out-expo);
+            --transition-element: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-base: #030407; 
+            --bg-surface-1: rgba(255, 255, 255, 0.02); 
+            --bg-surface-2: rgba(255, 255, 255, 0.05); 
+            --bg-surface-3: rgba(255, 255, 255, 0.1);  
+            
+            --bg-accent: #FFFFFF; 
+            --bg-accent-hover: #E0EDFF;
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-accent: #030407; 
+            --text-tech: rgba(255, 255, 255, 0.3);
+
+            --glow-color: 255, 255, 255;
+            --shader-core: #FFFFFF;
+            --shader-fringe: #4A88FF;
+            
+            --status-good: #4ade80;
+            --status-warn: #fbbf24;
+            --status-err: #f87171;
+        }
+
+        [data-theme="light"] {
+            --bg-base: #F5F7FA;
+            --bg-surface-1: rgba(255, 255, 255, 0.6);
+            --bg-surface-2: rgba(0, 0, 0, 0.04);
+            --bg-surface-3: rgba(0, 0, 0, 0.08);
+            
+            --bg-accent: #050608; 
+            --bg-accent-hover: #1A1E26;
+            
+            --text-primary: #050608;
+            --text-secondary: rgba(0, 0, 0, 0.5);
+            --text-accent: #FFFFFF;
+            --text-tech: rgba(0, 0, 0, 0.3);
+
+            --glow-color: 0, 0, 0;
+            --shader-core: #050608;
+            --shader-fringe: #8BA3CC;
+            
+            --status-good: #16a34a;
+            --status-warn: #d97706;
+            --status-err: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            transition: var(--transition-theme);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #webgl-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .font-tech {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass-panel {
+            background-color: var(--bg-surface-1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--bg-surface-2);
+            transition: var(--transition-theme);
+        }
+
+        .system-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-primary);
+            background: var(--bg-surface-2);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            transition: var(--transition-element);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background-color: var(--bg-surface-2);
+        }
+
+        .nav-item.active {
+            color: var(--text-primary);
+            background-color: var(--bg-surface-3);
+            font-weight: 600;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 50%;
+            width: 3px;
+            background-color: var(--text-primary);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .btn-surface {
+            background-color: var(--bg-surface-2);
+            color: var(--text-primary);
+            transition: var(--transition-element);
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-surface:hover {
+            background-color: var(--bg-surface-3);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background-color: var(--bg-accent);
+            color: var(--text-accent);
+            transition: var(--transition-element);
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 0 30px rgba(var(--glow-color), 0.15);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--bg-accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(var(--glow-color), 0.25);
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        
+        .chart-bar {
+            background-color: var(--bg-surface-3);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s var(--ease-out-expo), background-color 0.3s ease;
+        }
+        .chart-bar:hover {
+            background-color: var(--bg-accent);
+            opacity: 0.8;
+        }
+
+        .builder-item {
+            border: 1px dashed var(--bg-surface-3);
+            transition: all 0.2s ease;
+        }
+        .builder-item:hover {
+            border-color: var(--text-secondary);
+            background: var(--bg-surface-1);
+        }
+
+        .trend-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 3s ease-in-out forwards;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body vid="9">
+
+    <div id="webgl-container" vid="10"></div>
+
+    <div class="relative z-10 w-full h-full flex p-6 gap-6" vid="11">
+        
+        <aside id="mobileSidebar" class="w-[280px] shrink-0 h-full hidden md:flex flex-col absolute md:relative z-50 bg-[var(--bg-base)] glass-panel rounded-[var(--radius-card)] p-8" vid="12">
+            <div class="flex flex-col items-start mb-10" vid="13">
+                <div class="system-badge mb-3" vid="14">TN.LOGISTICS</div>
+                <h1 class="text-3xl font-semibold tracking-tight leading-none" vid="15">Titan<br vid="16">Cargo.</h1>
+            </div>
+
+            <nav class="flex flex-col gap-1 flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2" vid="17">
+                <div class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest mt-2 mb-2 px-4" vid="18">MAIN</div>
+                <a href="dashboard.html" class="nav-item" vid="19">Dashboard</a>
+                <a href="configure.html" class="nav-item" vid="20">Configure</a>
+                <a href="projects.html" class="nav-item" vid="21">Projects</a>
+                <a href="tasks.html" class="nav-item" vid="22">Tasks</a>
+                <a href="reports.html" class="nav-item active" vid="23">Reports</a>
+
+                <div class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest mt-8 mb-2 px-4" vid="24">NETWORK</div>
+                <a href="teams.html" class="nav-item" vid="25">Team</a>
+                <a href="clients.html" class="nav-item" vid="26">Clients</a>
+                <a href="calendar.html" class="nav-item" vid="27">Calendar</a>
+            </nav>
+
+            <div class="mt-6 pt-6 border-t border-[var(--bg-surface-2)] flex flex-col gap-4" vid="28">
+                <a href="login.html" class="nav-item text-[var(--text-secondary)] hover:text-[var(--status-err)] -mx-2" vid="29">Logout</a>
+                <div class="font-tech text-[10px] text-[var(--text-tech)] leading-loose uppercase" vid="30">
+                    Titan Cargo.<br vid="31">All rights reserved.<br vid="32">Built by Norris Frank
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 h-full flex flex-col gap-6 min-w-0" vid="33">
+            
+            <header class="h-16 shrink-0 glass-panel rounded-full px-6 flex items-center justify-between" vid="34">
+                <div class="flex items-center gap-4" vid="35">
+                    <div class="font-tech text-xs text-[var(--text-tech)]" vid="36">SYS.ANALYTICS // ON-LINE</div>
+                    <div class="w-1 h-4 bg-[var(--bg-surface-3)]" vid="37"></div>
+                    <h2 class="text-xl font-medium tracking-tight" vid="38">Operational Intelligence</h2>
+                </div>
+                
+                <div class="flex items-center gap-4" vid="39">
+                    <div class="font-tech text-[11px] text-[var(--text-secondary)] px-3 py-1.5 bg-[var(--bg-surface-2)] rounded-full border border-[var(--bg-surface-3)]" vid="40">
+                        REPORT_ID: TC-882-X
+                    </div>
+                    <button class="btn-surface h-10 px-4 gap-2 text-sm font-medium" vid="41">
+                        <i class="ph ph-export text-lg" vid="42"></i>
+                        <span class="font-tech text-xs tracking-wider" vid="43">EXPORT</span>
+                    </button>
+                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" vid="44">
+                        GENERATE REPORT <i class="ph ph-magic-wand ml-2 text-base" vid="45"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-6 pb-6" vid="46">
+                
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" vid="47">
+                    
+                    <div class="glass-panel rounded-[var(--radius-card)] p-8 flex flex-col h-[320px]" vid="48">
+                        <div class="flex justify-between items-start mb-8" vid="49">
+                            <div vid="50">
+                                <span class="font-tech text-[11px] text-[var(--text-secondary)] uppercase tracking-widest" vid="51">Global Shipping Volumes</span>
+                                <h3 class="text-2xl font-semibold tracking-tighter mt-1" vid="52">142,804 <span class="text-sm font-normal text-[var(--status-good)]" vid="53">+12%</span></h3>
+                            </div>
+                            <div class="flex gap-2" vid="54">
+                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center cursor-pointer hover:bg-[var(--bg-surface-3)]" vid="55"><i class="ph ph-dots-three" vid="56"></i></div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-end justify-between gap-3 px-2" vid="57">
+                            <div class="chart-bar w-full h-[40%]" vid="58"></div>
+                            <div class="chart-bar w-full h-[60%]" vid="59"></div>
+                            <div class="chart-bar w-full h-[55%]" vid="60"></div>
+                            <div class="chart-bar w-full h-[85%]" vid="61"></div>
+                            <div class="chart-bar w-full h-[45%]" vid="62"></div>
+                            <div class="chart-bar w-full h-[70%]" vid="63"></div>
+                            <div class="chart-bar w-full h-[95%]" vid="64"></div>
+                            <div class="chart-bar w-full h-[65%]" vid="65"></div>
+                            <div class="chart-bar w-full h-[40%]" vid="66"></div>
+                            <div class="chart-bar w-full h-[30%]" vid="67"></div>
+                            <div class="chart-bar w-full h-[50%]" vid="68"></div>
+                            <div class="chart-bar w-full h-[80%]" vid="69"></div>
+                        </div>
+                        <div class="flex justify-between mt-4 font-tech text-[9px] text-[var(--text-tech)] tracking-widest" vid="70">
+                            <span vid="71">JAN</span><span vid="72">FEB</span><span vid="73">MAR</span><span vid="74">APR</span><span vid="75">MAY</span><span vid="76">JUN</span><span vid="77">JUL</span><span vid="78">AUG</span><span vid="79">SEP</span><span vid="80">OCT</span><span vid="81">NOV</span><span vid="82">DEC</span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="glass-panel rounded-[var(--radius-card)] p-8 flex flex-col h-[320px] relative overflow-hidden" vid="83">
+                        <div class="flex justify-between items-start mb-8" vid="84">
+                            <div vid="85">
+                                <span class="font-tech text-[11px] text-[var(--text-secondary)] uppercase tracking-widest" vid="86">Revenue Forecast vs Actual</span>
+                                <h3 class="text-2xl font-semibold tracking-tighter mt-1" vid="87">$52.4M <span class="text-sm font-normal text-[var(--text-secondary)]" vid="88">MTD</span></h3>
+                            </div>
+                            <div class="flex items-center gap-4 font-tech text-[10px]" vid="89">
+                                <div class="flex items-center gap-2" vid="90"><div class="w-2 h-2 rounded-full bg-[var(--bg-accent)]" vid="91"></div> ACTUAL</div>
+                                <div class="flex items-center gap-2 opacity-30" vid="92"><div class="w-2 h-2 rounded-full bg-[var(--text-secondary)]" vid="93"></div> TARGET</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 relative" vid="94">
+                            <svg class="w-full h-full" viewBox="0 0 500 100" preserveAspectRatio="none" vid="95">
+                                <path class="trend-line" d="M0,80 Q50,70 100,75 T200,40 T300,60 T400,20 T500,30" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" vid="96"></path>
+                                <path class="opacity-10" d="M0,85 Q50,75 100,80 T200,45 T300,65 T400,25 T500,35" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" vector-effect="non-scaling-stroke" vid="97"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1" vid="98">
+                    
+                    
+                    <div class="lg:col-span-1 glass-panel rounded-[var(--radius-card)] p-8 flex flex-col h-[400px]" vid="99">
+                        <div class="mb-8" vid="100">
+                            <span class="font-tech text-[11px] text-[var(--text-secondary)] uppercase tracking-widest" vid="101">Efficiency index</span>
+                            <h3 class="text-xl font-medium tracking-tight mt-1" vid="102">On-Time Reliability</h3>
+                        </div>
+                        
+                        <div class="flex-1 flex flex-col justify-center items-center relative" vid="103">
+                            <svg class="w-48 h-48 transform -rotate-90" vid="104">
+                                <circle cx="96" cy="96" r="80" stroke="var(--bg-surface-3)" stroke-width="12" fill="transparent" vid="105"></circle>
+                                <circle cx="96" cy="96" r="80" stroke="var(--text-primary)" stroke-width="12" fill="transparent" stroke-dasharray="502.6" stroke-dashoffset="35" class="transition-all duration-1000 ease-out" vid="106"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center" vid="107">
+                                <span class="text-4xl font-bold tracking-tighter" vid="108">93.4%</span>
+                                <span class="font-tech text-[10px] text-[var(--status-good)] tracking-widest mt-1" vid="109">+2.1% AVG</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-8" vid="110">
+                            <div class="p-4 rounded-2xl bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)]" vid="111">
+                                <div class="font-tech text-[10px] text-[var(--text-tech)] uppercase mb-1" vid="112">AIRBORNE</div>
+                                <div class="text-lg font-semibold" vid="113">98.2%</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)]" vid="114">
+                                <div class="font-tech text-[10px] text-[var(--text-tech)] uppercase mb-1" vid="115">OCEANIC</div>
+                                <div class="text-lg font-semibold" vid="116">88.7%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="lg:col-span-2 glass-panel rounded-[var(--radius-card)] p-8 flex flex-col h-[400px]" vid="117">
+                        <div class="flex justify-between items-center mb-8" vid="118">
+                            <div vid="119">
+                                <h3 class="text-xl font-medium tracking-tight" vid="120">Custom Query Builder</h3>
+                                <p class="text-sm text-[var(--text-secondary)] mt-1" vid="121">Construct dimensional data exports.</p>
+                            </div>
+                            <div class="flex gap-2" vid="122">
+                                <button class="btn-surface h-8 px-3 text-[10px] font-tech uppercase tracking-widest" vid="123">Load Preset</button>
+                                <button class="btn-surface h-8 px-3 text-[10px] font-tech uppercase tracking-widest" vid="124">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 grid grid-cols-2 gap-8" vid="125">
+                            <div class="flex flex-col gap-4" vid="126">
+                                <div class="flex flex-col gap-2" vid="127">
+                                    <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="128">Data Source</label>
+                                    <div class="h-12 w-full bg-[var(--bg-surface-2)] rounded-xl border border-[var(--bg-surface-3)] flex items-center px-4 justify-between cursor-pointer hover:border-[var(--text-secondary)] transition-colors" vid="129">
+                                        <span class="text-sm" vid="130">Active Fleet Logistics</span>
+                                        <i class="ph ph-caret-down" vid="131"></i>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2" vid="132">
+                                    <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="133">Metrics</label>
+                                    <div class="flex flex-wrap gap-2" vid="134">
+                                        <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-accent)] text-[var(--text-accent)] text-xs font-medium flex items-center gap-2" vid="135">Fuel Efficiency <i class="ph ph-x" vid="136"></i></span>
+                                        <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-surface-3)] text-xs font-medium flex items-center gap-2" vid="137">Route Drift <i class="ph ph-plus" vid="138"></i></span>
+                                        <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-surface-3)] text-xs font-medium flex items-center gap-2" vid="139">Latency <i class="ph ph-plus" vid="140"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2" vid="141">
+                                <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="142">Layout Preview</label>
+                                <div class="flex-1 builder-item rounded-2xl flex items-center justify-center p-6 text-center" vid="143">
+                                    <div class="flex flex-col items-center gap-3" vid="144">
+                                        <i class="ph ph-layout text-3xl opacity-20" vid="145"></i>
+                                        <p class="text-xs text-[var(--text-tech)] max-w-[180px]" vid="146">Drag metrics here to define report structure</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex items-center justify-between border-t border-[var(--bg-surface-2)] pt-6" vid="147">
+                            <div class="flex items-center gap-4" vid="148">
+                                <div class="flex -space-x-2" vid="149">
+                                    <div class="w-8 h-8 rounded-full border-2 border-[var(--bg-base)] bg-blue-500" vid="150"></div>
+                                    <div class="w-8 h-8 rounded-full border-2 border-[var(--bg-base)] bg-emerald-500" vid="151"></div>
+                                    <div class="w-8 h-8 rounded-full border-2 border-[var(--bg-base)] bg-zinc-700 flex items-center justify-center text-[8px] font-tech" vid="152">+4</div>
+                                </div>
+                                <span class="text-xs text-[var(--text-secondary)]" vid="153">Shared with Analytics Team</span>
+                            </div>
+                            <button class="btn-primary h-12 px-8 font-tech text-xs tracking-widest" vid="154">SAVE CONFIGURATION</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script vid="155">
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+        camera.position.z = 1;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const vertexShader = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`;
+        const fragmentShader = `
+            uniform float u_time;
+            uniform vec2 u_resolution;
+            varying vec2 vUv;
+            void main() {
+                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+                float glow = 0.05 / length(uv - vec2(0.9, 0.1));
+                gl_FragColor = vec4(vec3(1.0), glow * 0.2);
+            }
+        `;
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms: {
+                u_time: { value: 0.0 },
+                u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+            },
+            transparent: true
+        });
+        scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+
+        function animate() {
+            requestAnimationFrame(animate);
+            material.uniforms.u_time.value += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+</body></html>

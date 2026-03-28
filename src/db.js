@@ -4,9 +4,10 @@ require('dotenv').config();
 let pool;
 
 if (process.env.DATABASE_URL) {
+  const isLocal = process.env.DATABASE_URL.includes('localhost') || process.env.DATABASE_URL.includes('127.0.0.1');
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    ssl: isLocal ? false : { rejectUnauthorized: false },
   });
 } else {
   pool = new Pool({

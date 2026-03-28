@@ -1,0 +1,491 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Titan Cargo - Registration</title>
+    <script src="https://cdn.tailwindcss.com" vid="5"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@100..800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet" vid="6">
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="7"></script>
+    <script vid="8">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#050507',
+                            surface: '#0a0a0e',
+                            surfaceHover: '#121218',
+                            cyan: '#00E5FF',
+                            cyanDim: 'rgba(0, 229, 255, 0.15)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            textMuted: '#8b8b93'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': `linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+                        'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+                    },
+                    boxShadow: {
+                        'cyan-glow': '0 0 20px rgba(0, 229, 255, 0.3)',
+                        'cyan-glow-lg': '0 0 40px rgba(0, 229, 255, 0.2)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite reverse',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-cyan': 'pulseCyan 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scanline': 'scanline 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        pulseCyan: {
+                            '0%, 100%': { opacity: '0.3', filter: 'blur(40px)' },
+                            '50%': { opacity: '0.6', filter: 'blur(50px)' },
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="9">
+        body {
+            background-color: #050507;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #0a0a0e inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .glass-panel {
+            background: rgba(10, 10, 14, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .clip-edges {
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        
+        .tech-dots {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="flex w-screen h-screen font-sans selection:bg-brand-cyan selection:text-black" vid="10">
+
+    <div class="w-1/2 h-full flex flex-col relative z-20 bg-brand-bg shadow-[20px_0_50px_rgba(0,0,0,0.5)]" vid="11">
+        
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-cyan to-transparent opacity-30" vid="12"></div>
+
+        <div class="flex items-center justify-between p-8 lg:px-16 lg:py-10" vid="13">
+            <div class="flex items-center gap-3 group cursor-pointer" vid="14">
+                <div class="w-8 h-8 rounded-sm bg-brand-cyan flex items-center justify-center shadow-cyan-glow transition-all duration-300 group-hover:shadow-cyan-glow-lg group-hover:scale-105" vid="15">
+                    <i class="ph-bold ph-cube text-black text-xl" vid="16"></i>
+                </div>
+                <span class="font-space font-bold text-xl tracking-wide uppercase" vid="17">Titan <span class="text-brand-textMuted font-light" vid="18">Cargo</span></span>
+            </div>
+            <a href="#" class="font-mono text-xs text-brand-textMuted hover:text-white transition-colors flex items-center gap-2" vid="19">
+                RETURN TO MAIN <i class="ph ph-arrow-right" vid="20"></i>
+            </a>
+        </div>
+
+        <div class="flex-1 flex flex-col overflow-y-auto hide-scrollbar pt-8 px-8 lg:px-24 max-w-2xl mx-auto w-full pb-24" vid="21">
+            
+            <div class="mb-8" vid="22">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 mb-6" vid="23">
+                    <div class="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" vid="24"></div>
+                    <span class="font-mono text-[10px] text-brand-cyan uppercase tracking-widest" vid="25">SYS.CORE // USER_REGISTRATION</span>
+                </div>
+                <h1 class="font-space text-4xl lg:text-5xl font-semibold mb-3 tracking-tight" vid="26">Initialize Profile</h1>
+                <p class="text-brand-textMuted font-sans text-sm lg:text-base max-w-md" vid="27">Create your enterprise account to access the next-generation global logistics network.</p>
+            </div>
+
+            <form class="space-y-5" vid="28">
+                
+                <div class="space-y-1.5 group" vid="29">
+                    <label class="block font-mono text-[11px] uppercase text-brand-textMuted tracking-wider ml-4 group-focus-within:text-brand-cyan transition-colors" vid="30">Enterprise Entity</label>
+                    <div class="relative" vid="31">
+                        <i class="ph ph-buildings absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-lg group-focus-within:text-brand-cyan transition-colors" vid="32"></i>
+                        <input type="text" placeholder="e.g. Acme Corporation" class="w-full bg-brand-surface border border-brand-border rounded-full py-3.5 pl-12 pr-6 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan focus:bg-brand-surfaceHover transition-all font-mono" vid="33">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5 group" vid="34">
+                    <label class="block font-mono text-[11px] uppercase text-brand-textMuted tracking-wider ml-4 group-focus-within:text-brand-cyan transition-colors" vid="35">Authentication Node (Email)</label>
+                    <div class="relative" vid="36">
+                        <i class="ph ph-envelope-simple absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-lg group-focus-within:text-brand-cyan transition-colors" vid="37"></i>
+                        <input type="email" placeholder="admin@acme.corp" class="w-full bg-brand-surface border border-brand-border rounded-full py-3.5 pl-12 pr-6 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan focus:bg-brand-surfaceHover transition-all font-mono" vid="38">
+                    </div>
+                </div>
+
+                <div class="flex gap-4" vid="39">
+                    <div class="space-y-1.5 group flex-1" vid="40">
+                        <label class="block font-mono text-[11px] uppercase text-brand-textMuted tracking-wider ml-4 group-focus-within:text-brand-cyan transition-colors" vid="41">Security Key</label>
+                        <div class="relative" vid="42">
+                            <i class="ph ph-lock-key absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-lg group-focus-within:text-brand-cyan transition-colors" vid="43"></i>
+                            <input type="password" placeholder="••••••••••••" class="w-full bg-brand-surface border border-brand-border rounded-full py-3.5 pl-12 pr-10 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan focus:bg-brand-surfaceHover transition-all font-mono" vid="44">
+                            <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors" vid="45">
+                                <i class="ph ph-eye" vid="46"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 group flex-1" vid="47">
+                        <label class="block font-mono text-[11px] uppercase text-brand-textMuted tracking-wider ml-4 group-focus-within:text-brand-cyan transition-colors" vid="48">Verify Key</label>
+                        <div class="relative" vid="49">
+                            <i class="ph ph-shield-check absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-lg group-focus-within:text-brand-cyan transition-colors" vid="50"></i>
+                            <input type="password" placeholder="••••••••••••" class="w-full bg-brand-surface border border-brand-border rounded-full py-3.5 pl-12 pr-6 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-brand-cyan focus:ring-1 focus:ring-brand-cyan focus:bg-brand-surfaceHover transition-all font-mono" vid="51">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 pb-2" id="roleSelectionField">
+                    <label class="block font-mono text-[11px] uppercase text-brand-textMuted tracking-wider ml-4 mb-2">Account Type</label>
+                    <div class="flex gap-4">
+                        <label class="cursor-pointer flex items-center gap-2">
+                            <input type="radio" name="role" value="CLIENT" checked class="accent-brand-cyan">
+                            <span class="text-sm font-mono">User (Client)</span>
+                        </label>
+                        <label class="cursor-pointer flex items-center gap-2">
+                            <input type="radio" name="role" value="ADMIN" class="accent-brand-cyan">
+                            <span class="text-sm font-mono">Admin (Staff)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-4" vid="52">
+                    <button type="submit" class="w-full bg-brand-cyan text-black font-space font-bold uppercase tracking-widest text-sm rounded-full py-4 hover:bg-white hover:shadow-cyan-glow transition-all duration-300 flex items-center justify-center gap-2 group relative overflow-hidden" vid="53">
+                        <span class="relative z-10" vid="54">Establish Connection</span>
+                        <i class="ph-bold ph-arrow-right relative z-10 group-hover:translate-x-1 transition-transform" vid="55"></i>
+                        <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out z-0" vid="56"></div>
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="mt-8 flex items-center gap-4" vid="57">
+                <div class="h-px bg-brand-border flex-1" vid="58"></div>
+                <span class="font-mono text-[10px] text-brand-textMuted uppercase tracking-widest" vid="59">Or integrate via</span>
+                <div class="h-px bg-brand-border flex-1" vid="60"></div>
+            </div>
+
+            <div class="mt-6 flex gap-4" vid="61">
+                <button class="flex-1 flex items-center justify-center gap-2 bg-transparent border border-brand-border rounded-full py-3 hover:bg-brand-surface hover:border-white/20 transition-all font-mono text-xs text-gray-300 hover:text-white" vid="62">
+                    <i class="ph-fill ph-google-logo text-lg" vid="63"></i>
+                    Google Workspace
+                </button>
+                <button class="flex-1 flex items-center justify-center gap-2 bg-transparent border border-brand-border rounded-full py-3 hover:bg-brand-surface hover:border-white/20 transition-all font-mono text-xs text-gray-300 hover:text-white" vid="64">
+                    <i class="ph-fill ph-linkedin-logo text-lg" vid="65"></i>
+                    LinkedIn
+                </button>
+            </div>
+
+            <div class="mt-8 text-center" vid="66">
+                <p class="font-mono text-xs text-brand-textMuted" vid="67">
+                    CONNECTION ALREADY ESTABLISHED? 
+                    <a href="#" class="text-brand-cyan hover:text-white underline underline-offset-4 transition-colors ml-1" vid="68">AUTHENTICATE HERE</a>
+                </p>
+            </div>
+
+        </div>
+        
+        <div class="absolute bottom-4 left-8 right-8 flex justify-between items-center font-mono text-[10px] text-brand-textMuted uppercase opacity-50" vid="69">
+            <span vid="70">v 2.4.0-stable</span>
+            <div class="flex gap-4" vid="71">
+                <a href="#" class="hover:text-brand-cyan transition-colors" vid="72">Privacy</a>
+                <a href="#" class="hover:text-brand-cyan transition-colors" vid="73">Terms</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-1/2 h-full relative overflow-hidden bg-[#020203]" vid="74">
+        
+        <div class="absolute inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20" vid="75"></div>
+        <div class="absolute inset-0 tech-dots opacity-30" vid="76"></div>
+
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-cyan/20 rounded-full blur-[120px] animate-pulse-cyan mix-blend-screen pointer-events-none" vid="77"></div>
+        <div class="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none" vid="78"></div>
+
+        <div class="absolute top-0 left-0 w-full h-[200%] pointer-events-none z-0 opacity-10" vid="79">
+            <div class="w-full h-1/2 bg-gradient-to-b from-transparent via-brand-cyan to-transparent animate-scanline" vid="80"></div>
+        </div>
+
+        <svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg" vid="81">
+            <path d="M 0 200 Q 300 100 600 400 T 1440 300" fill="none" stroke="#00E5FF" stroke-width="1" stroke-dasharray="4 4" vid="82"></path>
+            <path d="M 0 600 Q 400 800 800 500 T 1440 700" fill="none" stroke="#00E5FF" stroke-width="0.5" vid="83"></path>
+            <circle cx="600" cy="400" r="4" fill="#00E5FF" vid="84"></circle>
+            <circle cx="600" cy="400" r="12" fill="none" stroke="#00E5FF" stroke-width="1" class="animate-ping" vid="85"></circle>
+            <circle cx="800" cy="500" r="4" fill="#00E5FF" vid="86"></circle>
+        </svg>
+
+        <div class="absolute inset-0 flex items-center justify-center p-12 z-10" vid="87">
+            <div class="relative w-full max-w-2xl aspect-square" vid="88">
+                
+                <div class="absolute top-10 right-10 glass-panel p-4 rounded-xl w-64 animate-float-slow z-20 border-l-2 border-l-brand-cyan" vid="89">
+                    <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2" vid="90">
+                        <span class="font-mono text-[10px] text-brand-textMuted uppercase" vid="91">Node Status</span>
+                        <div class="flex items-center gap-1.5" vid="92">
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-400" vid="93"></div>
+                            <span class="font-mono text-[10px] text-green-400" vid="94">ONLINE</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2" vid="95">
+                        <div class="flex justify-between items-end" vid="96">
+                            <span class="font-mono text-xs text-gray-400" vid="97">Active Vessels</span>
+                            <span class="font-space font-medium text-lg text-white" vid="98">1,204</span>
+                        </div>
+                        <div class="w-full bg-black/50 h-1 rounded-full overflow-hidden" vid="99">
+                            <div class="bg-brand-cyan w-[78%] h-full rounded-full" vid="100"></div>
+                        </div>
+                        <div class="flex justify-between items-end pt-2" vid="101">
+                            <span class="font-mono text-xs text-gray-400" vid="102">Global Containers</span>
+                            <span class="font-space font-medium text-lg text-white" vid="103">45.2M</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 border border-brand-cyan/20 rounded-full flex items-center justify-center animate-[spin_60s_linear_infinite] z-10" vid="104">
+                    <div class="w-full h-full border border-brand-cyan/10 rounded-full border-t-brand-cyan/40 animate-[spin_40s_linear_infinite_reverse]" vid="105"></div>
+                    <div class="absolute inset-4 border border-white/5 rounded-full border-b-brand-cyan/30 animate-[spin_30s_linear_infinite]" vid="106"></div>
+                    <div class="absolute inset-12 bg-black/40 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center shadow-[inset_0_0_50px_rgba(0,229,255,0.1)]" vid="107">
+                        <div class="text-center" vid="108">
+                            <i class="ph-duotone ph-globe-hemisphere-west text-5xl text-brand-cyan opacity-80 mb-2" vid="109"></i>
+                            <div class="font-mono text-[10px] text-brand-cyan tracking-widest uppercase" vid="110">Global Core</div>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-brand-cyan rounded-full shadow-cyan-glow" vid="111"></div>
+                    <div class="absolute top-1/2 -right-2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]" vid="112"></div>
+                </div>
+
+                <div class="absolute bottom-20 left-10 glass-panel p-5 rounded-xl w-72 animate-float-medium z-20" vid="113">
+                    <div class="flex items-center gap-3 mb-4" vid="114">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 border border-indigo-500/30" vid="115">
+                            <i class="ph ph-shield-check text-lg" vid="116"></i>
+                        </div>
+                        <div vid="117">
+                            <div class="font-space text-sm font-medium text-white" vid="118">Enterprise Security</div>
+                            <div class="font-mono text-[10px] text-brand-textMuted uppercase" vid="119">End-to-End Encryption</div>
+                        </div>
+                    </div>
+                    
+                    <div class="font-mono text-[10px] text-brand-textMuted uppercase mb-2" vid="120">Live Authentication Stream</div>
+                    <div class="bg-black/40 rounded-lg p-3 font-mono text-[9px] text-brand-cyan leading-relaxed h-20 overflow-hidden relative" vid="121">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" vid="122"></div>
+                        <div class="animate-[float_10s_linear_infinite_reverse]" vid="123">
+                            &gt; Init connection from IP 192.168.1.x...<br vid="124">
+                            &gt; Verifying SSL certificate... [OK]<br vid="125">
+                            &gt; Handshake protocol v3.1... [OK]<br vid="126">
+                            &gt; Establishing secure tunnel...<br vid="127">
+                            &gt; Awaiting user payload...<br vid="128">
+                            &gt; Validating schema...<br vid="129">
+                            &gt; Node sync in progress...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute top-1/3 left-0 glass-panel px-3 py-1.5 rounded-full flex items-center gap-2 animate-float-fast z-20 border border-brand-cyan/30" vid="130">
+                    <div class="w-2 h-2 rounded-full bg-brand-cyan shadow-[0_0_8px_#00E5FF]" vid="131"></div>
+                    <span class="font-mono text-[10px] text-white" vid="132">LAT: 34.0522 N</span>
+                </div>
+
+                <div class="absolute bottom-1/3 right-10 glass-panel px-3 py-1.5 rounded-full flex items-center gap-2 animate-float-fast z-20 delay-1000 border border-white/10" vid="133">
+                    <div class="w-1.5 h-1.5 rounded-full bg-brand-textMuted" vid="134"></div>
+                    <span class="font-mono text-[10px] text-brand-textMuted" vid="135">LON: 118.2437 W</span>
+                </div>
+
+                <div class="absolute -right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2" vid="136">
+                    <div class="w-1 h-8 bg-brand-cyan rounded-full opacity-80" vid="137"></div>
+                    <div class="w-1 h-4 bg-white/20 rounded-full" vid="138"></div>
+                    <div class="w-1 h-12 bg-white/20 rounded-full" vid="139"></div>
+                    <div class="w-1 h-6 bg-brand-cyan rounded-full opacity-40" vid="140"></div>
+                </div>
+                
+                <div class="absolute -left-4 top-1/2 -translate-y-1/2 flex flex-col gap-2" vid="141">
+                    <div class="w-1 h-6 bg-white/20 rounded-full" vid="142"></div>
+                    <div class="w-1 h-12 bg-white/20 rounded-full" vid="143"></div>
+                    <div class="w-1 h-4 bg-brand-cyan rounded-full opacity-60" vid="144"></div>
+                    <div class="w-1 h-8 bg-white/20 rounded-full" vid="145"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 w-full p-8 z-20 bg-gradient-to-t from-[#020203] to-transparent" vid="146">
+            <div class="flex justify-between items-end" vid="147">
+                <div class="font-mono text-[10px] text-brand-textMuted uppercase tracking-widest leading-loose" vid="148">
+                    TERMINAL ID: T-CRG-994<br vid="149">
+                    SESSION: ENCRYPTED_AER294<br vid="150">
+                    <span class="text-brand-cyan" vid="151">SYSTEM ONLINE</span>
+                </div>
+                <div class="flex gap-1" vid="152">
+                    <div class="w-1.5 h-1.5 bg-brand-cyan rounded-full animate-pulse" vid="153"></div>
+                    <div class="w-1.5 h-1.5 bg-brand-cyan/50 rounded-full" vid="154"></div>
+                    <div class="w-1.5 h-1.5 bg-brand-cyan/20 rounded-full" vid="155"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let isLogin = false;
+    const form = document.querySelector('form');
+    
+    // Add IDs to inputs first so we can easily fetch them
+    const inputs = document.querySelectorAll('input');
+    inputs[0].id = 'nameInput';
+    inputs[1].id = 'emailInput';
+    inputs[2].id = 'passwordInput';
+    inputs[3].id = 'verifyInput';
+
+    const nameField = inputs[0].closest('.group');
+    const verifyField = inputs[3].closest('.group.flex-1');
+    const titleObj = document.querySelector('h1.font-space');
+    const subObj = document.querySelector('.mb-8 p.text-brand-textMuted');
+    const submitBtn = document.querySelector('button[type="submit"] span.relative.z-10');
+    
+    // Auth toggle link
+    const toggleLink = document.querySelector('.mt-8.text-center a');
+    const toggleTextContainer = document.querySelector('.mt-8.text-center p');
+    
+    function setMode() {
+        if(isLogin) {
+            nameField.style.display = 'none';
+            verifyField.style.display = 'none';
+            document.getElementById('roleSelectionField').style.display = 'none';
+            titleObj.textContent = 'Authenticate Hub';
+            subObj.textContent = 'Enter your credentials to access the logistics network.';
+            submitBtn.textContent = 'Authenticate';
+            toggleTextContainer.innerHTML = 'NEED AN ACCOUNT? <a href="#" id="toggleAuthMode" class="text-brand-cyan hover:text-white underline underline-offset-4 transition-colors ml-1">REGISTER HERE</a>';
+        } else {
+            nameField.style.display = 'block';
+            verifyField.style.display = 'block';
+            document.getElementById('roleSelectionField').style.display = 'block';
+            titleObj.textContent = 'Initialize Profile';
+            subObj.textContent = 'Create your enterprise account to access the next-generation global logistics network.';
+            submitBtn.textContent = 'Establish Connection';
+            toggleTextContainer.innerHTML = 'CONNECTION ALREADY ESTABLISHED? <a href="#" id="toggleAuthMode" class="text-brand-cyan hover:text-white underline underline-offset-4 transition-colors ml-1">AUTHENTICATE HERE</a>';
+        }
+        
+        document.getElementById('toggleAuthMode').addEventListener('click', (e) => {
+            e.preventDefault();
+            isLogin = !isLogin;
+            setMode();
+        });
+    }
+    
+    // Initial setup
+    toggleLink.id = 'toggleAuthMode';
+    document.getElementById('toggleAuthMode').addEventListener('click', (e) => {
+        e.preventDefault();
+        isLogin = !isLogin;
+        setMode();
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('emailInput').value;
+        const password = document.getElementById('passwordInput').value;
+        const name = document.getElementById('nameInput').value;
+        const verify = document.getElementById('verifyInput').value;
+
+        // Basic front-end email validation
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,10}$/;
+        if (!emailRegex.test(email.trim())) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        submitBtn.textContent = 'Processing...';
+
+        try {
+            if (isLogin) {
+                // Login
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    if (data.user.role === 'ADMIN' || data.user.role === 'OPERATIONS') {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        window.location.href = 'quote.html';
+                    }
+                } else {
+                    alert(data.error || 'Login failed');
+                }
+            } else {
+                // Register
+                if (password !== verify) {
+                    alert('Passwords do not match');
+                    submitBtn.textContent = 'Establish Connection';
+                    return;
+                }
+                const roleRadio = document.querySelector('input[name="role"]:checked');
+                const role = roleRadio ? roleRadio.value : 'CLIENT';
+                
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, role })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Route appropriately instead of forcing dashboard
+                    if (data.user.role === 'ADMIN' || data.user.role === 'OPERATIONS') {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        window.location.href = 'quote.html';
+                    }
+                } else {
+                    alert(data.error || 'Registration failed');
+                }
+            }
+        } catch (err) {
+            console.error(err);
+            alert('An error occurred. Please try again later.');
+        } finally {
+            if(isLogin) submitBtn.textContent = 'Authenticate';
+            else submitBtn.textContent = 'Establish Connection';
+        }
+    });
+});
+</script>
+</body></html>

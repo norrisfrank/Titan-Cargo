@@ -10,7 +10,10 @@ const tripsRoutes = require('./routes/trips');
 const vehiclesRoutes = require('./routes/vehicles');
 const adminRoutes = require('./routes/admin');
 const quotesRoutes = require('./routes/quotes');
+const mpesaRoutes = require('./routes/mpesa');
+const trackingRoutes = require('./routes/tracking');
 const { requireAuth, requireRole } = require('./middleware/auth');
+const { globalLimiter, authLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -28,6 +31,7 @@ if (frontendOrigin) {
   app.use(cors());
 }
 app.use(express.json());
+app.use(globalLimiter);
 
 const publicDir = path.join(__dirname, '..', 'public');
 app.use(express.static(publicDir));
@@ -36,13 +40,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/admin', requireAuth, requireRole('ADMIN'), adminRoutes);
 app.use('/api/dashboard', requireAuth, requireRole('ADMIN', 'OPERATIONS'), dashboardRoutes);
 app.use('/api/bookings', requireAuth, bookingsRoutes);
 app.use('/api/trips', requireAuth, requireRole('ADMIN', 'OPERATIONS'), tripsRoutes);
 app.use('/api/vehicles', requireAuth, requireRole('ADMIN'), vehiclesRoutes);
 app.use('/api/quotes', quotesRoutes);
+app.use('/api/mpesa', requireAuth, mpesaRoutes);
+app.use('/api/tracking', trackingRoutes);
 
 // 404 handler
 app.use((req, res, next) => {
