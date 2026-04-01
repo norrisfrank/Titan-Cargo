@@ -12,8 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         // Quote Submission & Live Rates Logic
-        document.getElementById('bookBtn').addEventListener('click', async () => {
-            const origin = document.getElementById('origin').value;
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('bookBtn').addEventListener('click', async () => {
+                const origin = document.getElementById('origin').value;
             const destination = document.getElementById('destination').value;
             const weight = document.getElementById('weight').value;
             const typeNode = document.querySelector('input[name="cargoType"]:checked');
@@ -56,7 +57,7 @@
                                 <span class="text-white">You shall receive an email shortly with detailed payment instructions and routing metadata.</span>
                             </p>
                             <div class="pt-8 w-full mt-auto">
-                                <button class="w-full border border-white/20 rounded-full py-4 text-sm font-bold hover:bg-white/5 transition-colors" onclick="window.location.href='dashboard.html'">RETURN TO DASHBOARD</button>
+                                <button class="w-full border border-white/20 rounded-full py-4 text-sm font-bold hover:bg-white/5 transition-colors" onclick="window.location.href='dashboard.html'">RETURN TO MAIN</button>
                             </div>
                         </div>
                     `;
@@ -91,8 +92,8 @@
                 btn.innerHTML = originalContent;
             });
         };
-
-
+        
+        }); // End of DOMContentLoaded
 </script>
 
     

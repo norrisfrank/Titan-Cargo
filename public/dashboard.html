@@ -257,9 +257,11 @@
                 <a href="calendar.html" class="nav-item" vid="27">Calendar</a>
 
                 <div class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest mt-8 mb-2 px-4" vid="28">SYSTEM</div>
-                <a href="admin.html" class="nav-item" vid="29">Admin</a>
-                <a href="profile.html" class="nav-item" vid="30">Profile</a>
-                <a href="help.html" class="nav-item" vid="31">Help &amp; Support</a>
+                <a href="admin.html" class="nav-item">Admin</a>
+                <a href="profile.html" class="nav-item">Profile</a>
+                <a href="help.html" class="nav-item">Help & Support</a>
+                <a href="tracking.html" class="nav-item text-[var(--text-cyan)]">Tracking Engine</a>
+                <a href="quote.html" class="nav-item text-[var(--text-cyan)]">Quote Generator</a>
             </nav>
 
             
@@ -366,14 +368,15 @@
                     
                     <div class="lg:col-span-2 glass-panel rounded-[var(--radius-card)] p-8 flex flex-col min-h-[500px]" vid="90">
                         
-                        <div class="flex justify-between items-center mb-8" vid="91">
-                            <div vid="92">
-                                <h3 class="text-xl font-medium tracking-tight" vid="93">Active Transits</h3>
-                                <p class="text-sm text-[var(--text-secondary)] mt-1" vid="94">Real-time monitoring of high-priority cargo.</p>
+                        <div class="flex justify-between items-center mb-8">
+                            <div>
+                                <h3 class="text-xl font-medium tracking-tight">Active Transits</h3>
+                                <p class="text-sm text-[var(--text-secondary)] mt-1">Real-time monitoring of high-priority cargo.</p>
                             </div>
-                            <button class="btn-surface h-10 px-4 rounded-full font-tech text-xs tracking-wider gap-2" onclick="alert('Filtering mechanism is globally sync-ready. Advanced mapping pending.')" vid="95">
-                                FILTER <i class="ph ph-faders" vid="96"></i>
-                            </button>
+                            <div class="relative">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tech)]"></i>
+                                <input type="text" id="transitSearch" placeholder="Search shipments..." class="bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-full py-2 pl-9 pr-4 text-xs font-tech focus:outline-none focus:border-[var(--text-secondary)] w-64 transition-all focus:w-80">
+                            </div>
                         </div>
 
                         
@@ -593,6 +596,44 @@
         </main>
     </div>
 
+    <!-- Transit Detail Modal -->
+    <div id="transitModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeTransitModal()"></div>
+        <div class="relative w-full max-w-lg glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="transitModalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="system-badge mb-3">TRANSIT.DETAILS</div>
+                    <h3 class="text-2xl font-semibold tracking-tight" id="modalTransitName">Transit Name</h3>
+                    <p class="text-sm text-[var(--text-tech)] font-tech mt-1" id="modalTransitId">#0000</p>
+                </div>
+                <button onclick="closeTransitModal()" class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4 font-mono text-sm mb-8">
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Route Data:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTransitRoute">Unknown</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Current Status:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTransitStatus">PENDING</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Estimated Due:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTransitDue">TBD</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Cargo Desc:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTransitDesc">GENERAL</span>
+                </div>
+            </div>
+
+            <button class="w-full btn-primary h-12" onclick="closeTransitModal()">ACKNOWLEDGE & CLOSE</button>
+        </div>
+    </div>
+
     
     <script vid="228">
         
@@ -796,13 +837,15 @@
                         // Blend and render recent activity
                         const activity = [...transits, ...quotes].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
                         
+                        allCurrentTransits = activity;
+                        
                         activity.forEach(row => {
                             const isTransit = !!row.airway_bill;
                             const identifier = isTransit ? 'BM-' + row.id : 'QT-' + row.id;
                             const secondary = isTransit ? row.airway_bill : (row.cargo_type || 'GENERAL');
                             
                             newHtml += `
-                                <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" onclick="window.location.href='tracking.html'">
+                                <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" onclick='openTransitModal(${JSON.stringify(row)})'>
                                     <div class="col-span-3 flex flex-col gap-1">
                                         <span class="font-tech text-sm text-[var(--text-primary)]">${identifier}</span>
                                         <span class="text-xs text-[var(--text-secondary)]">${secondary}</span>
@@ -873,6 +916,98 @@
         document.addEventListener('DOMContentLoaded', loadDashboardData);
         // Refresh every 30 seconds
         setInterval(loadDashboardData, 30000);
+
+        // Transit Modal Logic
+        function openTransitModal(transit) {
+            const isTransit = !!transit.airway_bill;
+            document.getElementById('modalTransitId').innerText = isTransit ? 'BM-' + transit.id : 'QT-' + transit.id;
+            document.getElementById('modalTransitName').innerText = isTransit ? transit.airway_bill : (transit.cargo_type || 'GENERAL');
+            document.getElementById('modalTransitRoute').innerText = (transit.origin || 'Unknown') + ' -> ' + (transit.destination || 'Unknown');
+            document.getElementById('modalTransitStatus').innerText = transit.status || 'PENDING';
+            document.getElementById('modalTransitDue').innerText = "LIVE SYS LOG ACTIVATED";
+            document.getElementById('modalTransitDesc').innerText = transit.cargo_type || (isTransit ? "Airway Bill Dispatch" : "Quote Request");
+            
+            const modal = document.getElementById('transitModal');
+            const content = document.getElementById('transitModalContent');
+            
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeTransitModal() {
+            const modal = document.getElementById('transitModal');
+            const content = document.getElementById('transitModalContent');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Live Search Filtering
+        let allCurrentTransits = [];
+        document.getElementById('transitSearch').addEventListener('keyup', (e) => {
+            const query = e.target.value.toLowerCase();
+            const container = document.getElementById('liveTransitsContainer');
+            
+            if(!allCurrentTransits.length && container.children.length > 0) {
+               // Client side DOM search fallback
+               Array.from(container.children).forEach(row => {
+                   const text = row.innerText.toLowerCase();
+                   row.style.display = text.includes(query) ? '' : 'none';
+               });
+               return;
+            }
+
+            // Real data filter if we loaded it via API recently
+            const filtered = allCurrentTransits.filter(row => {
+                const s = JSON.stringify(row).toLowerCase();
+                return s.includes(query);
+            });
+            // Just re-render the container using the earlier `allCurrentTransits` fallback
+            let newHtml = '';
+            filtered.forEach(row => {
+                const isTransit = !!row.airway_bill;
+                const identifier = isTransit ? 'BM-' + row.id : 'QT-' + row.id;
+                const secondary = isTransit ? row.airway_bill : (row.cargo_type || 'GENERAL');
+                newHtml += `
+                    <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" onclick='openTransitModal(${JSON.stringify(row)})'>
+                        <div class="col-span-3 flex flex-col gap-1">
+                            <span class="font-tech text-sm text-[var(--text-primary)]">${identifier}</span>
+                            <span class="text-xs text-[var(--text-secondary)]">${secondary}</span>
+                        </div>
+                        <div class="col-span-4 flex items-center gap-3">
+                            <span class="text-sm font-medium w-full text-left truncate">${row.origin || 'N/A'}</span>
+                            <div class="flex-1 h-px bg-[var(--bg-surface-3)] relative w-full">
+                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--text-tech)] bg-[var(--bg-base)] px-2 text-[10px] font-tech rounded-full border border-[var(--bg-surface-3)]">
+                                    ${isTransit ? 'AWB' : 'NEW'}
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium w-full text-right truncate">${row.destination || 'N/A'}</span>
+                        </div>
+                        <div class="col-span-3 flex flex-col gap-1">
+                            <span class="font-tech text-[10px] text-[var(--status-good)] flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[var(--status-good)]"></span> ${row.status || 'PENDING'}</span>
+                            <span class="font-tech text-xs text-[var(--text-primary)]">LIVE</span>
+                        </div>
+                        <div class="col-span-2 flex justify-end">
+                            <button class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center text-[var(--text-secondary)] group-hover:bg-[var(--bg-accent)] group-hover:text-[var(--text-accent)] transition-all duration-300">
+                                <i class="ph ph-arrow-right text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            if(newHtml === '') {
+                newHtml = '<div class="text-center text-gray-500 py-10 font-mono text-sm">No matches found.</div>';
+            }
+            container.innerHTML = newHtml;
+        });
+
     </script>
 
 </body></html>

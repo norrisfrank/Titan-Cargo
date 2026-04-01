@@ -13,6 +13,30 @@ CREATE TABLE IF NOT EXISTS users (
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS projects (
+  id             BIGSERIAL PRIMARY KEY,
+  project_code   TEXT        NOT NULL UNIQUE,
+  name           TEXT        NOT NULL,
+  status         TEXT        NOT NULL,
+  origin         TEXT,
+  cargo_type     TEXT,
+  progress       INTEGER     NOT NULL DEFAULT 0,
+  team_members   JSONB       DEFAULT '[]', 
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS tasks (
+  id             BIGSERIAL   PRIMARY KEY,
+  task_code      TEXT        NOT NULL UNIQUE,
+  title          TEXT        NOT NULL,
+  project_id     BIGINT      REFERENCES projects(id) ON DELETE SET NULL,
+  status         TEXT        NOT NULL,
+  priority       TEXT        NOT NULL,
+  eta            TEXT,
+  assignees      JSONB       DEFAULT '[]',
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS clients (
   id             BIGSERIAL PRIMARY KEY,
   name           TEXT        NOT NULL,

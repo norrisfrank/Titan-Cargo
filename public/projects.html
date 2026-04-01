@@ -284,228 +284,73 @@
 
             <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-8 pb-6" vid="50">
                 
-                <div class="flex justify-between items-end" vid="51">
-                    <div vid="52">
-                        <p class="font-tech text-[11px] text-[var(--text-secondary)] uppercase tracking-[0.2em] mb-1" vid="53">Overview</p>
-                        <h3 class="text-3xl font-semibold tracking-tight" vid="54">Current Operations</h3>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <p class="font-tech text-[11px] text-[var(--text-secondary)] uppercase tracking-[0.2em] mb-1">Overview</p>
+                        <h3 class="text-3xl font-semibold tracking-tight">Current Operations</h3>
                     </div>
-                    <div class="flex gap-2" vid="55">
-                        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3" vid="56">
-                            <span class="text-xs text-[var(--text-secondary)]" vid="57">Sort:</span>
-                            <span class="text-sm font-medium" vid="58">Priority</span>
-                            <i class="ph ph-caret-down text-xs opacity-50" vid="59"></i>
+                    <div class="flex gap-4">
+                        <div class="relative">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tech)]"></i>
+                            <input type="text" id="projectSearch" placeholder="Search projects..." class="bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-full py-2 pl-9 pr-4 text-xs font-tech focus:outline-none focus:border-[var(--text-secondary)] w-64 transition-all focus:w-80">
+                        </div>
+                        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3">
+                            <span class="text-xs text-[var(--text-secondary)]">Sort:</span>
+                            <span class="text-sm font-medium">Priority</span>
+                            <i class="ph ph-caret-down text-xs opacity-50"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" vid="60">
-                    
-                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="61">
-                        <div class="flex justify-between items-start" vid="62">
-                            <div class="flex flex-col gap-1" vid="63">
-                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="64">PRJ-2281</span>
-                                <h4 class="text-lg font-semibold" vid="65">Nordic Expansion</h4>
-                            </div>
-                            <span class="system-badge text-[var(--status-good)] border border-[var(--status-good)] bg-transparent" vid="66">ON TRACK</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4" vid="67">
-                            <div vid="68">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="69">Origin</p>
-                                <p class="text-sm font-medium" vid="70">Oslo, Norway</p>
-                            </div>
-                            <div vid="71">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="72">Cargo Type</p>
-                                <p class="text-sm font-medium" vid="73">Renewable Infrastructure</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-2" vid="74">
-                            <div class="flex justify-between items-end font-tech text-[10px]" vid="75">
-                                <span class="text-[var(--text-secondary)]" vid="76">TIMELINE PROGRESS</span>
-                                <span class="text-[var(--text-primary)]" vid="77">72%</span>
-                            </div>
-                            <div class="progress-bar-bg" vid="78">
-                                <div class="progress-bar-fill" style="width: 72%;" vid="79"></div>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="80">
-                            <div class="flex -space-x-2" vid="81">
-                                <div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="82">JD</div>
-                                <div class="w-8 h-8 rounded-full bg-blue-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="83">KM</div>
-                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="84">+4</div>
-                            </div>
-                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="85"></i>
-                        </div>
-                    </div>
-
-                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="86">
-                        <div class="flex justify-between items-start" vid="87">
-                            <div class="flex flex-col gap-1" vid="88">
-                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="89">PRJ-2285</span>
-                                <h4 class="text-lg font-semibold" vid="90">Pacific Bridge</h4>
-                            </div>
-                            <span class="system-badge text-[var(--status-warn)] border border-[var(--status-warn)] bg-transparent" vid="91">DELAYED</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4" vid="92">
-                            <div vid="93">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="94">Origin</p>
-                                <p class="text-sm font-medium" vid="95">Busan, KR</p>
-                            </div>
-                            <div vid="96">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="97">Cargo Type</p>
-                                <p class="text-sm font-medium" vid="98">Semiconductors</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-2" vid="99">
-                            <div class="flex justify-between items-end font-tech text-[10px]" vid="100">
-                                <span class="text-[var(--text-secondary)]" vid="101">TIMELINE PROGRESS</span>
-                                <span class="text-[var(--text-primary)]" vid="102">34%</span>
-                            </div>
-                            <div class="progress-bar-bg" vid="103">
-                                <div class="progress-bar-fill" style="width: 34%; background-color: var(--status-warn);" vid="104"></div>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="105">
-                            <div class="flex -space-x-2" vid="106">
-                                <div class="w-8 h-8 rounded-full bg-indigo-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="107">LS</div>
-                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="108">+2</div>
-                            </div>
-                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="109"></i>
-                        </div>
-                    </div>
-
-                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="110">
-                        <div class="flex justify-between items-start" vid="111">
-                            <div class="flex flex-col gap-1" vid="112">
-                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="113">PRJ-2290</span>
-                                <h4 class="text-lg font-semibold" vid="114">Silk Road AI</h4>
-                            </div>
-                            <span class="system-badge text-[var(--status-good)] border border-[var(--status-good)] bg-transparent" vid="115">STABLE</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4" vid="116">
-                            <div vid="117">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="118">Origin</p>
-                                <p class="text-sm font-medium" vid="119">Shenzhen, CN</p>
-                            </div>
-                            <div vid="120">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="121">Cargo Type</p>
-                                <p class="text-sm font-medium" vid="122">Precision Robotics</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-2" vid="123">
-                            <div class="flex justify-between items-end font-tech text-[10px]" vid="124">
-                                <span class="text-[var(--text-secondary)]" vid="125">TIMELINE PROGRESS</span>
-                                <span class="text-[var(--text-primary)]" vid="126">91%</span>
-                            </div>
-                            <div class="progress-bar-bg" vid="127">
-                                <div class="progress-bar-fill" style="width: 91%;" vid="128"></div>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="129">
-                            <div class="flex -space-x-2" vid="130">
-                                <div class="w-8 h-8 rounded-full bg-emerald-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="131">AT</div>
-                                <div class="w-8 h-8 rounded-full bg-gray-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="132">RW</div>
-                            </div>
-                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="133"></i>
-                        </div>
-                    </div>
-
-                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="134">
-                        <div class="flex justify-between items-start" vid="135">
-                            <div class="flex flex-col gap-1" vid="136">
-                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="137">PRJ-2302</span>
-                                <h4 class="text-lg font-semibold" vid="138">Trans-African Rail</h4>
-                            </div>
-                            <span class="system-badge text-[var(--text-tech)] border border-[var(--bg-surface-3)] bg-transparent" vid="139">INITIALIZING</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4" vid="140">
-                            <div vid="141">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="142">Origin</p>
-                                <p class="text-sm font-medium" vid="143">Cape Town, ZA</p>
-                            </div>
-                            <div vid="144">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="145">Cargo Type</p>
-                                <p class="text-sm font-medium" vid="146">Industrial Rail</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-2" vid="147">
-                            <div class="flex justify-between items-end font-tech text-[10px]" vid="148">
-                                <span class="text-[var(--text-secondary)]" vid="149">TIMELINE PROGRESS</span>
-                                <span class="text-[var(--text-primary)]" vid="150">8%</span>
-                            </div>
-                            <div class="progress-bar-bg" vid="151">
-                                <div class="progress-bar-fill" style="width: 8%;" vid="152"></div>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="153">
-                            <div class="flex -space-x-2" vid="154">
-                                <div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="155">MF</div>
-                            </div>
-                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="156"></i>
-                        </div>
-                    </div>
-
-                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" vid="157">
-                        <div class="flex justify-between items-start" vid="158">
-                            <div class="flex flex-col gap-1" vid="159">
-                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest" vid="160">PRJ-2311</span>
-                                <h4 class="text-lg font-semibold" vid="161">Andean Mining Sync</h4>
-                            </div>
-                            <span class="system-badge text-[var(--status-err)] border border-[var(--status-err)] bg-transparent" vid="162">CRITICAL</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4" vid="163">
-                            <div vid="164">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="165">Origin</p>
-                                <p class="text-sm font-medium" vid="166">Lima, PE</p>
-                            </div>
-                            <div vid="167">
-                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase" vid="168">Cargo Type</p>
-                                <p class="text-sm font-medium" vid="169">Raw Lithium</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-2" vid="170">
-                            <div class="flex justify-between items-end font-tech text-[10px]" vid="171">
-                                <span class="text-[var(--text-secondary)]" vid="172">TIMELINE PROGRESS</span>
-                                <span class="text-[var(--text-primary)]" vid="173">45%</span>
-                            </div>
-                            <div class="progress-bar-bg" vid="174">
-                                <div class="progress-bar-fill" style="width: 45%; background-color: var(--status-err);" vid="175"></div>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center" vid="176">
-                            <div class="flex -space-x-2" vid="177">
-                                <div class="w-8 h-8 rounded-full bg-red-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="178">HB</div>
-                                <div class="w-8 h-8 rounded-full bg-slate-900 border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="179">TR</div>
-                                <div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]" vid="180">+1</div>
-                            </div>
-                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]" vid="181"></i>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel border-dashed border-2 border-[var(--bg-surface-3)] rounded-[var(--radius-card)] p-8 flex flex-col items-center justify-center gap-4 group cursor-pointer" vid="182">
-                        <div class="w-12 h-12 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center group-hover:bg-[var(--bg-accent)] group-hover:text-[var(--text-accent)] transition-all" vid="183">
-                            <i class="ph ph-plus text-xl" vid="184"></i>
-                        </div>
-                        <p class="font-tech text-xs text-[var(--text-secondary)] uppercase tracking-widest" vid="185">Create New Operation</p>
-                    </div>
-
+                <div id="projectGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- Dynamic Projects go here -->
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Create Project Modal Form -->
+    <div id="createProjectModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCreateModal()"></div>
+        <div class="relative w-full max-w-lg glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="createProjectModalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="system-badge mb-3">ACTIVATE.PROJECT</div>
+                    <h3 class="text-2xl font-semibold tracking-tight">New Project Profile</h3>
+                </div>
+                <button onclick="closeCreateModal()" class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <form id="createProjectForm" class="space-y-4">
+                <div>
+                    <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Project Name</label>
+                    <input type="text" id="cp_name" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Origin Point</label>
+                        <input type="text" id="cp_origin" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                    </div>
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Cargo Type</label>
+                        <input type="text" id="cp_cargo" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Initial Status</label>
+                    <select id="cp_status" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors appearance-none">
+                        <option value="INITIALIZING">INITIALIZING</option>
+                        <option value="STABLE">STABLE</option>
+                        <option value="ON TRACK">ON TRACK</option>
+                        <option value="DELAYED">DELAYED</option>
+                        <option value="CRITICAL">CRITICAL</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full btn-primary h-12 mt-4">INITIALIZE PROJECT</button>
+            </form>
+        </div>
     </div>
 
     <script vid="186">
@@ -678,6 +523,152 @@
             renderer.setSize(width, height);
             material.uniforms.u_resolution.value.set(width, height);
         });
+
+        // Live API Logic for Projects
+        let allProjects = [];
+        
+        async function fetchProjects() {
+            try {
+                const res = await fetch('/api/projects');
+                const data = await res.json();
+                allProjects = data;
+                renderProjects(data);
+            } catch(e) { console.error('Error fetching projects:', e); }
+        }
+
+        function renderProjects(projects) {
+            const grid = document.getElementById('projectGrid');
+            grid.innerHTML = '';
+            
+            projects.forEach(p => {
+                const colorMap = {
+                    'ON TRACK': 'var(--status-good)',
+                    'DELAYED': 'var(--status-warn)',
+                    'CRITICAL': 'var(--status-err)',
+                    'STABLE': 'var(--status-good)',
+                    'INITIALIZING': 'var(--text-tech)'
+                };
+                const color = colorMap[p.status] || 'var(--text-primary)';
+                
+                let membersHtml = '';
+                if(p.team_members && Array.isArray(p.team_members)) {
+                    p.team_members.forEach(m => {
+                        const bg = m.color || 'bg-[var(--bg-surface-3)]';
+                        membersHtml += `<div class="w-8 h-8 rounded-full ${bg} border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]">${m.initials}</div>`;
+                    });
+                }
+                
+                const card = `
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" onclick="console.log('Open project ${p.project_code}')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col gap-1">
+                                <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest">${p.project_code}</span>
+                                <h4 class="text-lg font-semibold">${p.name}</h4>
+                            </div>
+                            <span class="system-badge bg-transparent" style="color: ${color}; border: 1px solid ${color}">${p.status}</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Origin</p>
+                                <p class="text-sm font-medium">${p.origin || '--'}</p>
+                            </div>
+                            <div>
+                                <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Cargo Type</p>
+                                <p class="text-sm font-medium">${p.cargo_type || '--'}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between items-end font-tech text-[10px]">
+                                <span class="text-[var(--text-secondary)]">TIMELINE PROGRESS</span>
+                                <span class="text-[var(--text-primary)]">${p.progress}%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: ${p.progress}%; background-color: ${p.status === 'DELAYED' || p.status === 'CRITICAL' ? color : 'var(--text-primary)'};"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-[var(--bg-surface-2)] mt-auto flex justify-between items-center">
+                            <div class="flex -space-x-2">
+                                ${membersHtml || '<div class="w-8 h-8 rounded-full bg-[var(--bg-surface-3)] border-2 border-[var(--bg-base)] flex items-center justify-center text-[10px]">+</div>'}
+                            </div>
+                            <i class="ph ph-arrow-right text-lg text-[var(--text-secondary)]"></i>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
+
+            const createBtn = `
+                <div class="glass-panel border-dashed border-2 border-[var(--bg-surface-3)] rounded-[var(--radius-card)] p-8 flex flex-col items-center justify-center gap-4 group cursor-pointer h-full min-h-[300px]" onclick="openCreateModal()">
+                    <div class="w-12 h-12 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center group-hover:bg-[var(--bg-accent)] group-hover:text-[var(--text-accent)] transition-all">
+                        <i class="ph ph-plus text-xl"></i>
+                    </div>
+                    <p class="font-tech text-xs text-[var(--text-secondary)] uppercase tracking-widest">Create New Operation</p>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', createBtn);
+        }
+
+        document.getElementById('projectSearch').addEventListener('keyup', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = allProjects.filter(p => p.name.toLowerCase().includes(query) || p.project_code.toLowerCase().includes(query) || p.origin.toLowerCase().includes(query));
+            renderProjects(filtered);
+        });
+
+        // Wire Create Buttons
+        const createBtns = document.querySelectorAll('button:has(.ph-plus)');
+        createBtns.forEach(b => b.addEventListener('click', openCreateModal));
+
+        function openCreateModal() {
+            const modal = document.getElementById('createProjectModal');
+            const content = document.getElementById('createProjectModalContent');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeCreateModal() {
+            const modal = document.getElementById('createProjectModal');
+            const content = document.getElementById('createProjectModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        document.getElementById('createProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('cp_name').value,
+                origin: document.getElementById('cp_origin').value,
+                cargo_type: document.getElementById('cp_cargo').value,
+                status: document.getElementById('cp_status').value
+            };
+            const btn = e.target.querySelector('button');
+            const orig = btn.innerHTML;
+            btn.innerHTML = 'ACTIVATING...';
+            try {
+                await fetch('/api/projects', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                closeCreateModal();
+                e.target.reset();
+                fetchProjects();
+            } catch(e) {
+                console.error(e);
+            } finally {
+                btn.innerHTML = orig;
+            }
+        });
+
+        // Init
+        fetchProjects();
+
     </script>
 
 </body></html>

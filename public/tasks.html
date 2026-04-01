@@ -289,8 +289,8 @@
                         <i class="ph ph-moon text-lg" id="themeIcon" vid="46"></i>
                         <span id="themeText" class="font-tech text-xs tracking-wider" vid="47">DARK</span>
                     </button>
-                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" vid="48">
-                        CREATE TASK <i class="ph ph-plus ml-2 text-base" vid="49"></i>
+                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" onclick="openCreateTaskModal()">
+                        CREATE TASK <i class="ph ph-plus ml-2 text-base"></i>
                     </button>
                 </div>
             </header>
@@ -326,7 +326,7 @@
                         <div class="flex items-center gap-2" vid="69">
                             <div class="relative" vid="70">
                                 <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tech)]" vid="71"></i>
-                                <input type="text" placeholder="Search tasks..." class="bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-full py-2 pl-9 pr-4 text-xs font-tech focus:outline-none focus:border-[var(--text-secondary)] w-64" vid="72">
+                                <input type="text" id="taskSearch" placeholder="Search tasks..." class="bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-full py-2 pl-9 pr-4 text-xs font-tech focus:outline-none focus:border-[var(--text-secondary)] w-64 transition-all focus:w-80">
                             </div>
                             <button class="btn-surface h-10 w-10" vid="73"><i class="ph ph-funnel" vid="74"></i></button>
                             <button class="btn-surface h-10 px-4 font-tech text-[10px] tracking-widest uppercase" vid="75">Export</button>
@@ -342,118 +342,99 @@
                         <div class="col-span-1 text-right" vid="82">Due</div>
                     </div>
 
-                    <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-2" vid="83">
-                        
-                        <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" vid="84">
-                            <div class="col-span-1 font-tech text-xs text-[var(--text-tech)]" vid="85">#7822</div>
-                            <div class="col-span-4 flex flex-col" vid="86">
-                                <span class="text-sm font-medium truncate" vid="87">Finalize Manifest for TITAN-ALPHA</span>
-                                <span class="text-[10px] text-[var(--text-secondary)] uppercase font-tech" vid="88">Project: SHANGHAI_DIRECT</span>
-                            </div>
-                            <div class="col-span-2" vid="89">
-                                <span class="px-3 py-1 bg-red-500/10 text-[var(--status-err)] text-[10px] font-tech rounded-full border border-red-500/20" vid="90">OVERDUE</span>
-                            </div>
-                            <div class="col-span-2 flex items-center gap-2" vid="91">
-                                <div class="priority-dot bg-[var(--status-err)] shadow-[0_0_8px_var(--status-err)]" vid="92"></div>
-                                <span class="text-xs font-medium" vid="93">Urgent</span>
-                            </div>
-                            <div class="col-span-2" vid="94">
-                                <div class="avatar-group" vid="95">
-                                    <div class="avatar-item" style="background-image: url('https://i.pravatar.cc/100?u=1'); background-size: cover;" vid="96"></div>
-                                    <div class="avatar-item" style="background-image: url('https://i.pravatar.cc/100?u=2'); background-size: cover;" vid="97"></div>
-                                    <div class="avatar-item font-tech text-[8px] bg-[var(--bg-surface-3)]" vid="98">+2</div>
-                                </div>
-                            </div>
-                            <div class="col-span-1 text-right font-tech text-xs text-[var(--status-err)]" vid="99">EXP</div>
-                        </div>
-
-                        <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" vid="100">
-                            <div class="col-span-1 font-tech text-xs text-[var(--text-tech)]" vid="101">#7901</div>
-                            <div class="col-span-4 flex flex-col" vid="102">
-                                <span class="text-sm font-medium truncate" vid="103">AI Path Optimization Calibration</span>
-                                <span class="text-[10px] text-[var(--text-secondary)] uppercase font-tech" vid="104">Project: CORE_MAINTENANCE</span>
-                            </div>
-                            <div class="col-span-2" vid="105">
-                                <span class="px-3 py-1 bg-blue-500/10 text-[var(--status-info)] text-[10px] font-tech rounded-full border border-blue-500/20" vid="106">IN PROGRESS</span>
-                            </div>
-                            <div class="col-span-2 flex items-center gap-2" vid="107">
-                                <div class="priority-dot bg-[var(--status-info)] shadow-[0_0_8px_var(--status-info)]" vid="108"></div>
-                                <span class="text-xs font-medium" vid="109">Normal</span>
-                            </div>
-                            <div class="col-span-2" vid="110">
-                                <div class="avatar-group" vid="111">
-                                    <div class="avatar-item" style="background-image: url('https://i.pravatar.cc/100?u=3'); background-size: cover;" vid="112"></div>
-                                </div>
-                            </div>
-                            <div class="col-span-1 text-right font-tech text-xs" vid="113">2H</div>
-                        </div>
-
-                        <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" vid="114">
-                            <div class="col-span-1 font-tech text-xs text-[var(--text-tech)]" vid="115">#7915</div>
-                            <div class="col-span-4 flex flex-col" vid="116">
-                                <span class="text-sm font-medium truncate" vid="117">Customs clearance audit: Singapore</span>
-                                <span class="text-[10px] text-[var(--text-secondary)] uppercase font-tech" vid="118">Project: GLOBAL_COMPLIANCE</span>
-                            </div>
-                            <div class="col-span-2" vid="119">
-                                <span class="px-3 py-1 bg-amber-500/10 text-[var(--status-warn)] text-[10px] font-tech rounded-full border border-amber-500/20" vid="120">REVIEW</span>
-                            </div>
-                            <div class="col-span-2 flex items-center gap-2" vid="121">
-                                <div class="priority-dot bg-[var(--status-warn)] shadow-[0_0_8px_var(--status-warn)]" vid="122"></div>
-                                <span class="text-xs font-medium" vid="123">High</span>
-                            </div>
-                            <div class="col-span-2" vid="124">
-                                <div class="avatar-group" vid="125">
-                                    <div class="avatar-item" style="background-image: url('https://i.pravatar.cc/100?u=4'); background-size: cover;" vid="126"></div>
-                                    <div class="avatar-item" style="background-image: url('https://i.pravatar.cc/100?u=5'); background-size: cover;" vid="127"></div>
-                                </div>
-                            </div>
-                            <div class="col-span-1 text-right font-tech text-xs" vid="128">5H</div>
-                        </div>
-
-                        <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group" vid="129">
-                            <div class="col-span-1 font-tech text-xs text-[var(--text-tech)]" vid="130">#7942</div>
-                            <div class="col-span-4 flex flex-col" vid="131">
-                                <span class="text-sm font-medium truncate" vid="132">Fuel efficiency analysis - Q4 Fleet</span>
-                                <span class="text-[10px] text-[var(--text-secondary)] uppercase font-tech" vid="133">Project: SUSTAINABILITY_25</span>
-                            </div>
-                            <div class="col-span-2" vid="134">
-                                <span class="px-3 py-1 bg-[var(--bg-surface-3)] text-[var(--text-secondary)] text-[10px] font-tech rounded-full border border-[var(--bg-surface-3)]" vid="135">QUEUE</span>
-                            </div>
-                            <div class="col-span-2 flex items-center gap-2" vid="136">
-                                <div class="priority-dot bg-[var(--text-tech)]" vid="137"></div>
-                                <span class="text-xs font-medium" vid="138">Low</span>
-                            </div>
-                            <div class="col-span-2" vid="139">
-                                <span class="text-[10px] text-[var(--text-tech)] font-tech" vid="140">UNASSIGNED</span>
-                            </div>
-                            <div class="col-span-1 text-right font-tech text-xs" vid="141">12H</div>
-                        </div>
-
-                        <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group opacity-50 grayscale" vid="142">
-                            <div class="col-span-1 font-tech text-xs text-[var(--text-tech)]" vid="143">#7790</div>
-                            <div class="col-span-4 flex flex-col" vid="144">
-                                <span class="text-sm font-medium truncate line-through" vid="145">Onboard new logistics partner: Atlas</span>
-                                <span class="text-[10px] text-[var(--text-secondary)] uppercase font-tech" vid="146">Project: NETWORK_EXPANSION</span>
-                            </div>
-                            <div class="col-span-2" vid="147">
-                                <span class="px-3 py-1 bg-green-500/10 text-[var(--status-good)] text-[10px] font-tech rounded-full border border-green-500/20" vid="148">DONE</span>
-                            </div>
-                            <div class="col-span-2 flex items-center gap-2" vid="149">
-                                <div class="priority-dot bg-[var(--status-good)]" vid="150"></div>
-                                <span class="text-xs font-medium" vid="151">Low</span>
-                            </div>
-                            <div class="col-span-2" vid="152">
-                                <div class="avatar-group" vid="153">
-                                    <div class="avatar-item" style="background-image: url('https://i.pravatar.cc/100?u=6'); background-size: cover;" vid="154"></div>
-                                </div>
-                            </div>
-                            <div class="col-span-1 text-right font-tech text-xs" vid="155">FIN</div>
-                        </div>
+                    <div id="taskList" class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-2">
+                        <!-- Dynamic Tasks Go Here -->
+                    </div>
 
                     </div>
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Create Task Modal Form -->
+    <div id="createTaskModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCreateTaskModal()"></div>
+        <div class="relative w-full max-w-lg glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="createTaskModalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="system-badge mb-3">ACTIVATE.TASK</div>
+                    <h3 class="text-2xl font-semibold tracking-tight">New Operations Task</h3>
+                </div>
+                <button onclick="closeCreateTaskModal()" class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <form id="createTaskForm" class="space-y-4">
+                <div>
+                    <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Task Title</label>
+                    <input type="text" id="ct_title" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Initial Status</label>
+                        <select id="ct_status" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors appearance-none">
+                            <option value="QUEUE">QUEUE</option>
+                            <option value="IN PROGRESS">IN PROGRESS</option>
+                            <option value="REVIEW">REVIEW</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Priority</label>
+                        <select id="ct_priority" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors appearance-none">
+                            <option value="Low">Low</option>
+                            <option value="Normal">Normal</option>
+                            <option value="High">High</option>
+                            <option value="Urgent">Urgent</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">ETA / Due</label>
+                    <input type="text" id="ct_eta" value="TBD" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                </div>
+                <button type="submit" class="w-full btn-primary h-12 mt-4">INITIALIZE TASK</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Details Modal -->
+    <div id="taskModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeTaskModal()"></div>
+        <div class="relative w-full max-w-lg glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="taskModalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="system-badge mb-3">TASK.DETAILS</div>
+                    <h3 class="text-2xl font-semibold tracking-tight" id="modalTaskName">Task Name</h3>
+                    <p class="text-sm text-[var(--text-tech)] font-tech mt-1" id="modalTaskId">#0000</p>
+                </div>
+                <button onclick="closeTaskModal()" class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4 font-mono text-sm mb-8">
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Assigned Team:</span>
+                    <span class="text-[var(--text-primary)]">Global Optimization Desk</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Current Status:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTaskStatus">PENDING</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Associated Project:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTaskProject">UNKNOWN</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Estimated ETA / Due:</span>
+                    <span class="text-[var(--text-primary)]" id="modalTaskDue">TBD</span>
+                </div>
+            </div>
+
+            <button class="w-full btn-primary h-12" onclick="closeTaskModal()">ACKNOWLEDGE & CLOSE</button>
+        </div>
     </div>
 
     <script vid="156">
@@ -626,5 +607,166 @@
             renderer.setSize(width, height);
             material.uniforms.u_resolution.value.set(width, height);
         });
+
+        // --- Live API Logic for Tasks ---
+        let allTasks = [];
+        
+        async function fetchTasks() {
+            try {
+                const res = await fetch('/api/tasks');
+                const data = await res.json();
+                allTasks = data;
+                renderTasks(data);
+                updateDashboardCounts(data);
+            } catch(e) { console.error('Error fetching tasks:', e); }
+        }
+
+        function renderTasks(tasks) {
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+            
+            tasks.forEach(t => {
+                const sMap = {
+                    'OVERDUE': { col: 'var(--status-err)', bg: 'bg-red-500/10 border-red-500/20' },
+                    'REVIEW': { col: 'var(--status-warn)', bg: 'bg-amber-500/10 border-amber-500/20' },
+                    'IN PROGRESS': { col: 'var(--status-info)', bg: 'bg-blue-500/10 border-blue-500/20' },
+                    'DONE': { col: 'var(--status-good)', bg: 'bg-green-500/10 border-green-500/20' },
+                    'QUEUE': { col: 'var(--text-secondary)', bg: 'bg-[var(--bg-surface-3)] border-[var(--bg-surface-3)]' }
+                };
+                const pMap = { 'Urgent': 'var(--status-err)', 'High': 'var(--status-warn)', 'Normal': 'var(--status-info)', 'Low': 'var(--text-tech)' };
+                
+                const sData = sMap[t.status] || sMap['QUEUE'];
+                const pCol = pMap[t.priority] || pMap['Normal'];
+                const isDone = t.status === 'DONE' ? 'opacity-50 grayscale line-through' : '';
+
+                let avatars = '';
+                if(t.assignees && Array.isArray(t.assignees) && t.assignees.length > 0) {
+                    avatars = '<div class="avatar-group">';
+                    t.assignees.forEach(a => {
+                        if(a.avatar) avatars += `<div class="avatar-item" style="background-image: url('${a.avatar}'); background-size: cover;"></div>`;
+                        else if(a.text) avatars += `<div class="avatar-item font-tech text-[8px] bg-[var(--bg-surface-3)]">${a.text}</div>`;
+                    });
+                    avatars += '</div>';
+                } else {
+                    avatars = '<span class="text-[10px] text-[var(--text-tech)] font-tech">UNASSIGNED</span>';
+                }
+
+                const row = `
+                    <div class="list-row rounded-2xl p-4 px-6 grid grid-cols-12 gap-4 items-center cursor-pointer group ${isDone}" onclick="console.log('Open Task ${t.task_code}')">
+                        <div class="col-span-1 font-tech text-xs text-[var(--text-tech)]">#${t.task_code}</div>
+                        <div class="col-span-4 flex flex-col min-w-0 pr-4">
+                            <span class="text-sm font-medium truncate ${t.status === 'DONE' ? 'line-through' : ''}">${t.title}</span>
+                            <span class="text-[10px] text-[var(--text-secondary)] uppercase font-tech truncate">Project: ${t.project_name || 'UNASSIGNED'}</span>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="px-3 py-1 ${sData.bg} text-[10px] font-tech rounded-full border inline-block" style="color: ${sData.col}">${t.status}</span>
+                        </div>
+                        <div class="col-span-2 flex items-center gap-2">
+                            <div class="priority-dot rounded-full w-2 h-2" style="background-color: ${pCol}; box-shadow: 0 0 8px ${pCol}"></div>
+                            <span class="text-xs font-medium">${t.priority}</span>
+                        </div>
+                        <div class="col-span-2">
+                            ${avatars}
+                        </div>
+                        <div class="col-span-1 text-right font-tech text-xs" style="color: ${t.status === 'OVERDUE' ? 'var(--status-err)' : 'inherit'}">${t.eta}</div>
+                    </div>
+                `;
+                list.insertAdjacentHTML('beforeend', row);
+            });
+            
+            // Re-bind interactive modal opening for the rows
+            document.querySelectorAll('#taskList .list-row').forEach((row, index) => {
+                row.onclick = () => {
+                    const task = tasks[index];
+                    document.getElementById('modalTaskId').textContent = '#' + task.task_code;
+                    document.getElementById('modalTaskName').textContent = task.title;
+                    document.getElementById('modalTaskProject').textContent = task.project_name || 'UNASSIGNED';
+                    document.getElementById('modalTaskStatus').textContent = task.status;
+                    document.getElementById('modalTaskDue').textContent = task.eta;
+                    
+                    const el = document.getElementById('taskModal');
+                    const c = document.getElementById('taskModalContent');
+                    el.style.display = 'flex';
+                    setTimeout(() => { c.classList.remove('scale-95', 'opacity-0'); c.classList.add('scale-100', 'opacity-100'); }, 10);
+                };
+            });
+        }
+
+        // Live Search Filtering
+        if (document.getElementById('taskSearch')) {
+            document.getElementById('taskSearch').addEventListener('keyup', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = allTasks.filter(t => t.title.toLowerCase().includes(query) || t.task_code.includes(query));
+                renderTasks(filtered);
+            });
+        }
+
+        // Top Dashboard Counts
+        function updateDashboardCounts(data) {
+            const divs = document.querySelectorAll('.grid.grid-cols-1.lg\\:grid-cols-4 .text-2xl');
+            if(divs.length === 4) {
+                divs[0].textContent = String(data.filter(d => d.status === 'OVERDUE').length).padStart(2, '0');
+                divs[1].textContent = String(data.filter(d => d.status === 'REVIEW').length).padStart(2, '0');
+                divs[2].textContent = String(data.filter(d => d.status === 'IN PROGRESS').length).padStart(2, '0');
+                divs[3].textContent = String(data.filter(d => d.status === 'DONE').length).padStart(2, '0');
+            }
+        }
+
+        // Create Modal Management
+        function openCreateTaskModal() {
+            const modal = document.getElementById('createTaskModal');
+            const content = document.getElementById('createTaskModalContent');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeCreateTaskModal() {
+            const modal = document.getElementById('createTaskModal');
+            const content = document.getElementById('createTaskModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        function closeTaskModal() {
+            const modal = document.getElementById('taskModal');
+            const content = document.getElementById('taskModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                title: document.getElementById('ct_title').value,
+                status: document.getElementById('ct_status').value,
+                priority: document.getElementById('ct_priority').value,
+                eta: document.getElementById('ct_eta').value
+            };
+            const btn = e.target.querySelector('button');
+            const orig = btn.innerHTML;
+            btn.innerHTML = 'ACTIVATING...';
+            try {
+                await fetch('/api/tasks', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                closeCreateTaskModal();
+                e.target.reset();
+                fetchTasks();
+            } catch(e) {
+                console.error(e);
+            } finally {
+                btn.innerHTML = orig;
+            }
+        });
+
+        // Init
+        fetchTasks();
     </script>
 </body></html>

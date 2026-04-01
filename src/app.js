@@ -12,6 +12,8 @@ const adminRoutes = require('./routes/admin');
 const quotesRoutes = require('./routes/quotes');
 const mpesaRoutes = require('./routes/mpesa');
 const trackingRoutes = require('./routes/tracking');
+const projectsRoutes = require('./routes/projects');
+const tasksRoutes = require('./routes/tasks');
 const { requireAuth, requireRole } = require('./middleware/auth');
 const { globalLimiter, authLimiter } = require('./middleware/rateLimiter');
 
@@ -49,6 +51,8 @@ app.use('/api/vehicles', requireAuth, requireRole('ADMIN'), vehiclesRoutes);
 app.use('/api/quotes', quotesRoutes);
 app.use('/api/mpesa', requireAuth, mpesaRoutes);
 app.use('/api/tracking', trackingRoutes);
+app.use('/api/projects', projectsRoutes);
+app.use('/api/tasks', tasksRoutes);
 
 // 404 handler
 app.use((req, res, next) => {

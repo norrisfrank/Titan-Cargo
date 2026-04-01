@@ -3,11 +3,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
     <title vid="4">Titan Cargo // Reports &amp; Analytics</title>
     
-    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" vid="7"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <style vid="8">
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
         :root {
@@ -271,17 +272,17 @@
                     <div class="font-tech text-[11px] text-[var(--text-secondary)] px-3 py-1.5 bg-[var(--bg-surface-2)] rounded-full border border-[var(--bg-surface-3)]" vid="40">
                         REPORT_ID: TC-882-X
                     </div>
-                    <button class="btn-surface h-10 px-4 gap-2 text-sm font-medium" vid="41">
-                        <i class="ph ph-export text-lg" vid="42"></i>
-                        <span class="font-tech text-xs tracking-wider" vid="43">EXPORT</span>
+                    <button class="btn-surface h-10 px-4 gap-2 text-sm font-medium" onclick="window.generatePDF(event)">
+                        <i class="ph ph-export text-lg"></i>
+                        <span class="font-tech text-xs tracking-wider">EXPORT</span>
                     </button>
-                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" vid="44">
-                        GENERATE REPORT <i class="ph ph-magic-wand ml-2 text-base" vid="45"></i>
+                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" onclick="window.generatePDF(event)">
+                        GENERATE REPORT <i class="ph ph-magic-wand ml-2 text-base"></i>
                     </button>
                 </div>
             </header>
 
-            <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-6 pb-6" vid="46">
+            <div id="reportContentArea" class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-6 pb-6">
                 
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" vid="47">
@@ -473,6 +474,23 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
         });
+
+        window.generatePDF = function(event) {
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="ph ph-spinner text-lg"></i> <span class="font-tech text-xs">GENERATING...</span>';
+            const element = document.getElementById('reportContentArea');
+            const opt = {
+                margin:       [0.5, 0.5, 0.5, 0.5],
+                filename:     'Titan_Cargo_Analytics_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#030407' },
+                jsPDF:        { unit: 'in', format: 'tabloid', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalContent;
+            });
+        };
     </script>
 
 </body></html>
