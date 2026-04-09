@@ -292,8 +292,8 @@
                         <i class="ph ph-moon text-lg" id="themeIcon" vid="46"></i>
                         <span id="themeText" class="font-tech text-xs tracking-wider" vid="47">DARK</span>
                     </button>
-                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" onclick="window.location.href='quote.html'" vid="48">
-                        NEW SHIPMENT <i class="ph ph-plus ml-2 text-base" vid="49"></i>
+                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" onclick="openCreateModal()">
+                        NEW SHIPMENT <i class="ph ph-plus ml-2 text-base"></i>
                     </button>
                 </div>
             </header>
@@ -634,6 +634,50 @@
         </div>
     </div>
 
+    <!-- Create Project Modal Form -->
+    <div id="createProjectModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCreateModal()"></div>
+        <div class="relative w-full max-w-lg glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="createProjectModalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="system-badge mb-3">ACTIVATE.PROJECT</div>
+                    <h3 class="text-2xl font-semibold tracking-tight">New Project Profile</h3>
+                </div>
+                <button onclick="closeCreateModal()" class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <form id="createProjectForm" class="space-y-4">
+                <div>
+                    <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Project Name</label>
+                    <input type="text" id="cp_name" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Origin Point</label>
+                        <input type="text" id="cp_origin" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                    </div>
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Cargo Type</label>
+                        <input type="text" id="cp_cargo" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Initial Status</label>
+                    <select id="cp_status" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors appearance-none">
+                        <option value="INITIALIZING">INITIALIZING</option>
+                        <option value="STABLE">STABLE</option>
+                        <option value="ON TRACK">ON TRACK</option>
+                        <option value="DELAYED">DELAYED</option>
+                        <option value="CRITICAL">CRITICAL</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full btn-primary h-12 mt-4">INITIALIZE PROJECT</button>
+            </form>
+        </div>
+    </div>
+
     
     <script vid="228">
         
@@ -948,6 +992,53 @@
                 modal.style.display = 'none';
             }, 300);
         }
+
+        // Project Form JS
+        function openCreateModal() {
+            const modal = document.getElementById('createProjectModal');
+            const content = document.getElementById('createProjectModalContent');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeCreateModal() {
+            const modal = document.getElementById('createProjectModal');
+            const content = document.getElementById('createProjectModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        document.getElementById('createProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('cp_name').value,
+                origin: document.getElementById('cp_origin').value,
+                cargo_type: document.getElementById('cp_cargo').value,
+                status: document.getElementById('cp_status').value
+            };
+            const btn = e.target.querySelector('button');
+            const orig = btn.innerHTML;
+            btn.innerHTML = 'ACTIVATING...';
+            try {
+                await fetch('/api/projects', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                closeCreateModal();
+                e.target.reset();
+                if(typeof loadDashboardData === 'function') loadDashboardData();
+            } catch(e) {
+                console.error(e);
+            } finally {
+                btn.innerHTML = orig;
+            }
+        });
+
 
         // Live Search Filtering
         let allCurrentTransits = [];

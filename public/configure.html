@@ -6,6 +6,7 @@
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" vid="7"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 
     <style vid="8">
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
@@ -290,9 +291,9 @@
             
             <header class="h-16 shrink-0 glass-panel rounded-full px-6 flex items-center justify-between" vid="38">
                 <div class="flex items-center gap-4" vid="39">
-                    <div class="font-tech text-xs text-[var(--text-tech)]" vid="40">CONFIG // SYS.ADMIN</div>
+                    <div class="font-tech text-xs text-[var(--text-tech)]" vid="40">CONFIG // QUOTE_ENGINE</div>
                     <div class="w-1 h-4 bg-[var(--bg-surface-3)]" vid="41"></div>
-                    <h2 class="text-xl font-medium tracking-tight" vid="42">System Configuration</h2>
+                    <h2 class="text-xl font-medium tracking-tight" vid="42">Quote Management</h2>
                 </div>
                 
                 <div class="flex items-center gap-4" vid="43">
@@ -300,179 +301,39 @@
                         <i class="ph ph-moon text-lg" id="themeIcon" vid="45"></i>
                         <span id="themeText" class="font-tech text-xs tracking-wider" vid="46">DARK</span>
                     </button>
-                    <button class="btn-primary h-10 px-6 font-tech text-xs tracking-wider" vid="47">
-                        SAVE CHANGES <i class="ph ph-check ml-2 text-base" vid="48"></i>
-                    </button>
                 </div>
             </header>
 
             <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-8 pb-12" vid="49">
-                
-                <section vid="50">
-                    <div class="flex items-center gap-3 mb-6" vid="51">
-                        <i class="ph ph-buildings text-xl text-[var(--text-secondary)]" vid="52"></i>
-                        <h3 class="text-lg font-medium" vid="53">Company Profile</h3>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" vid="54">
-                        <div class="glass-panel p-6 rounded-3xl flex flex-col gap-4" vid="55">
-                            <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="56">Organization Name</label>
-                            <input type="text" class="input-field" value="Titan Cargo Logistics Corp." vid="57">
-                            <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest mt-2" vid="58">Operational Headquaters</label>
-                            <input type="text" class="input-field" value="Sector 7-B, Neo Tokyo Enclave" vid="59">
-                        </div>
-                        <div class="glass-panel p-6 rounded-3xl flex flex-col gap-4" vid="60">
-                            <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="61">Primary Contact Email</label>
-                            <input type="email" class="input-field" value="admin@titan-cargo.com" vid="62">
-                            <div class="flex gap-4" vid="63">
-                                <div class="flex-1" vid="64">
-                                    <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="65">Timezone</label>
-                                    <select class="input-field mt-1" vid="66">
-                                        <option vid="67">UTC +09:00 (JST)</option>
-                                        <option vid="68">UTC -05:00 (EST)</option>
-                                    </select>
-                                </div>
-                                <div class="flex-1" vid="69">
-                                    <label class="font-tech text-[10px] text-[var(--text-tech)] uppercase tracking-widest" vid="70">Currency</label>
-                                    <select class="input-field mt-1" vid="71">
-                                        <option vid="72">USD ($)</option>
-                                        <option vid="73">EUR (€)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section vid="74">
-                    <div class="flex items-center gap-3 mb-6" vid="75">
-                        <i class="ph ph-plug-connect text-xl text-[var(--text-secondary)]" vid="76"></i>
-                        <h3 class="text-lg font-medium" vid="77">Integrations &amp; API</h3>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" vid="78">
-                        <div class="config-card p-6 flex flex-col gap-4" vid="79">
-                            <div class="flex justify-between items-center" vid="80">
-                                <span class="font-tech text-xs font-bold" vid="81">PUBLIC_API_KEY</span>
-                                <span class="text-[var(--status-good)] text-[10px] font-tech" vid="82">ACTIVE</span>
-                            </div>
-                            <div class="flex gap-2" vid="83">
-                                <input type="password" readonly="" class="input-field font-mono text-xs" value="sk_titan_9823_x992_alpha_z" vid="84">
-                                <button class="btn-surface w-10 h-10 shrink-0 rounded-xl" vid="85"><i class="ph ph-copy" vid="86"></i></button>
-                            </div>
-                            <p class="text-[11px] text-[var(--text-tech)] leading-relaxed" vid="87">Used for client-side authentication and tracking widget embedding.</p>
-                        </div>
-                        <div class="config-card p-6 flex flex-col gap-4" vid="88">
-                            <div class="flex justify-between items-center" vid="89">
-                                <div class="flex items-center gap-2" vid="90">
-                                    <i class="ph ph-slack-logo text-lg text-[#4A154B]" vid="91"></i>
-                                    <span class="font-medium text-sm" vid="92">Slack Notifications</span>
-                                </div>
-                                <div class="toggle-switch on" vid="93"><div class="toggle-knob" vid="94"></div></div>
-                            </div>
-                            <p class="text-xs text-[var(--text-secondary)]" vid="95">Push critical fleet alerts directly to #operations channel.</p>
-                            <button class="btn-surface text-[10px] h-8 px-3 mt-auto font-tech" vid="96">CONFIGURE WEBHOOK</button>
-                        </div>
-                        <div class="config-card p-6 flex flex-col gap-4" vid="97">
-                            <div class="flex justify-between items-center" vid="98">
-                                <div class="flex items-center gap-2" vid="99">
-                                    <i class="ph ph-google-logo text-lg text-[#4285F4]" vid="100"></i>
-                                    <span class="font-medium text-sm" vid="101">Google Cloud</span>
-                                </div>
-                                <div class="toggle-switch" vid="102"><div class="toggle-knob" vid="103"></div></div>
-                            </div>
-                            <p class="text-xs text-[var(--text-secondary)]" vid="104">Sync route optimization logs to BigQuery for analysis.</p>
-                            <button class="btn-surface text-[10px] h-8 px-3 mt-auto font-tech" vid="105">CONNECT SERVICE</button>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" vid="106">
-                    <section vid="107">
-                        <div class="flex items-center gap-3 mb-6" vid="108">
-                            <i class="ph ph-bell-ringing text-xl text-[var(--text-secondary)]" vid="109"></i>
-                            <h3 class="text-lg font-medium" vid="110">Notifications</h3>
-                        </div>
-                        <div class="glass-panel rounded-3xl divide-y divide-[var(--bg-surface-2)] overflow-hidden" vid="111">
-                            <div class="p-5 flex justify-between items-center" vid="112">
-                                <div vid="113">
-                                    <div class="text-sm font-medium" vid="114">Critical Fleet Alerts</div>
-                                    <div class="text-[11px] text-[var(--text-secondary)]" vid="115">Immediate notification on vessel delay or pathing errors.</div>
-                                </div>
-                                <div class="toggle-switch on" vid="116"><div class="toggle-knob" vid="117"></div></div>
-                            </div>
-                            <div class="p-5 flex justify-between items-center" vid="118">
-                                <div vid="119">
-                                    <div class="text-sm font-medium" vid="120">Daily Summary Reports</div>
-                                    <div class="text-[11px] text-[var(--text-secondary)]" vid="121">Automated PDF overview sent every 06:00 JST.</div>
-                                </div>
-                                <div class="toggle-switch on" vid="122"><div class="toggle-knob" vid="123"></div></div>
-                            </div>
-                            <div class="p-5 flex justify-between items-center" vid="124">
-                                <div vid="125">
-                                    <div class="text-sm font-medium" vid="126">Billing &amp; Invoices</div>
-                                    <div class="text-[11px] text-[var(--text-secondary)]" vid="127">Receive copy of all transaction receipts.</div>
-                                </div>
-                                <div class="toggle-switch" vid="128"><div class="toggle-knob" vid="129"></div></div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section vid="130">
-                        <div class="flex items-center gap-3 mb-6" vid="131">
-                            <i class="ph ph-shield-check text-xl text-[var(--text-secondary)]" vid="132"></i>
-                            <h3 class="text-lg font-medium" vid="133">Security &amp; Auth</h3>
-                        </div>
-                        <div class="glass-panel rounded-3xl p-6 flex flex-col gap-6" vid="134">
-                            <div class="flex items-center justify-between" vid="135">
-                                <div class="flex items-center gap-3" vid="136">
-                                    <div class="w-10 h-10 rounded-xl bg-[var(--bg-surface-2)] flex items-center justify-center" vid="137">
-                                        <i class="ph ph-fingerprint text-xl" vid="138"></i>
-                                    </div>
-                                    <div vid="139">
-                                        <div class="text-sm font-medium" vid="140">Two-Factor Authentication</div>
-                                        <div class="text-[11px] text-[var(--status-good)] font-tech" vid="141">ENABLED</div>
-                                    </div>
-                                </div>
-                                <button class="btn-surface text-[10px] h-8 px-4 font-tech" vid="142">MANAGE</button>
-                            </div>
-                            <div class="flex items-center justify-between" vid="143">
-                                <div class="flex items-center gap-3" vid="144">
-                                    <div class="w-10 h-10 rounded-xl bg-[var(--bg-surface-2)] flex items-center justify-center" vid="145">
-                                        <i class="ph ph-keyhole text-xl" vid="146"></i>
-                                    </div>
-                                    <div vid="147">
-                                        <div class="text-sm font-medium" vid="148">Session Management</div>
-                                        <div class="text-[11px] text-[var(--text-secondary)]" vid="149">3 Active sessions detected</div>
-                                    </div>
-                                </div>
-                                <button class="btn-surface text-[10px] h-8 px-4 font-tech" vid="150">LOGOUT ALL</button>
-                            </div>
-                        </div>
-                    </section>
+                <!-- TABS -->
+                <div class="flex items-center gap-4 border-b border-[var(--bg-surface-2)] pb-4" id="quoteTabs">
+                    <button class="tab-btn active font-tech text-sm tracking-widest uppercase px-4 py-2 text-[var(--status-warn)] border-b-2 border-[var(--status-warn)]" onclick="setTab('PENDING', this)">PENDING</button>
+                    <button class="tab-btn font-tech text-sm tracking-widest uppercase px-4 py-2 text-[var(--text-secondary)] border-b-2 border-transparent" onclick="setTab('REVIEW', this)">REVIEW</button>
+                    <button class="tab-btn font-tech text-sm tracking-widest uppercase px-4 py-2 text-[var(--text-secondary)] border-b-2 border-transparent" onclick="setTab('PASSED', this)">PASSED</button>
                 </div>
 
-                <section vid="151">
-                    <div class="flex items-center gap-3 mb-6" vid="152">
-                        <i class="ph ph-credit-card text-xl text-[var(--text-secondary)]" vid="153"></i>
-                        <h3 class="text-lg font-medium" vid="154">Billing &amp; Usage</h3>
-                    </div>
-                    <div class="glass-panel rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-center" vid="155">
-                        <div class="flex-1" vid="156">
-                            <div class="system-badge bg-[var(--status-good)] bg-opacity-10 text-[var(--status-good)] border border-[var(--status-good)] border-opacity-20 mb-3" vid="157">Enterprise Plan</div>
-                            <h4 class="text-2xl font-semibold" vid="158">$1,450.00 <span class="text-sm font-normal text-[var(--text-secondary)]" vid="159">/ month</span></h4>
-                            <p class="text-sm text-[var(--text-secondary)] mt-2" vid="160">Next billing cycle starts on <span class="text-[var(--text-primary)] font-medium" vid="161">Nov 14, 2024</span>.</p>
-                        </div>
-                        <div class="w-full md:w-auto flex gap-3" vid="162">
-                            <button class="btn-surface h-12 px-8 text-sm font-medium border border-[var(--bg-surface-3)]" vid="163">VIEW INVOICES</button>
-                            <button class="btn-primary h-12 px-8 text-sm" vid="164">UPGRADE SCALE</button>
-                        </div>
-                    </div>
-                </section>
-
+                <!-- TABLE -->
+                <div class="glass-panel rounded-[var(--radius-card)] overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-[var(--bg-surface-2)] text-[var(--text-secondary)] font-tech text-[10px] tracking-widest uppercase">
+                                <th class="p-6 font-normal">Reference ID</th>
+                                <th class="p-6 font-normal">Route / Details</th>
+                                <th class="p-6 font-normal">Cost Estimate</th>
+                                <th class="p-6 font-normal">Status</th>
+                                <th class="p-6 font-normal">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotes-container">
+                            <!-- rendered quotes -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
 
-    <script vid="165">
+        <script vid="165">
         const themeBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
         const themeText = document.getElementById('themeText');
@@ -595,13 +456,108 @@
 
         document.querySelectorAll('.toggle-switch').forEach(el => {
             el.addEventListener('click', () => el.classList.toggle('on'));
-        });
-    
+    </script>
+
+    <!-- Configure Quote Modal Form -->
+    <div id="quoteModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeQuoteModal()"></div>
+        <div class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="quoteModalContent">
+            
+            <div class="flex justify-between items-start mb-6" id="pdf-header">
+                <div>
+                    <div class="system-badge mb-3">TN.LOGISTICS // QUOTE_DISPATCH</div>
+                    <h3 class="text-3xl font-semibold tracking-tight" id="modalQuoteTitle">Configure Quote</h3>
+                    <p class="text-sm text-[var(--text-tech)] font-tech mt-1" id="modalQuoteEmail">client@example.com</p>
+                </div>
+                <button onclick="closeQuoteModal()" class="no-print w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <!-- Details for Print -->
+            <div id="print-area" class="space-y-6">
+                <!-- Data goes here, maybe grid layout -->
+                <div class="grid grid-cols-2 gap-6 p-6 rounded-2xl bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)]">
+                    <div>
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Origin</p>
+                        <p class="text-lg font-medium" id="modalOrigin">Shanghai</p>
+                    </div>
+                    <div>
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Destination</p>
+                        <p class="text-lg font-medium" id="modalDestination">Los Angeles</p>
+                    </div>
+                    <div>
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Cargo Specs</p>
+                        <p class="text-md" id="modalCargo">General / 1000kg</p>
+                    </div>
+                    <div>
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Initial Est. Cost</p>
+                        <p class="text-md block" id="modalCost">$3,400.00</p>
+                    </div>
+                </div>
+
+                <div class="no-print space-y-4">
+                    <h4 class="font-semibold text-lg border-t border-[var(--bg-surface-3)] pt-6">Logistics Configuration</h4>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Available Vessels</label>
+                            <select id="selVessel" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors appearance-none">
+                                <option value="TITAN OMEGA (M/V)">TITAN OMEGA (M/V)</option>
+                                <option value="TITAN NEBULA (A/C)">TITAN NEBULA (A/C)</option>
+                                <option value="STELLAR FREIGHTER 9">STELLAR FREIGHTER 9</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest flex justify-between items-end">
+                                Final Price (USD)
+                                <span class="flex gap-1 text-[8px]">
+                                    <button onclick="applyDiscount(5, event)" class="bg-[var(--bg-surface-3)] px-1.5 py-0.5 rounded hover:bg-white hover:text-black">5%</button>
+                                    <button onclick="applyDiscount(10, event)" class="bg-[var(--bg-surface-3)] px-1.5 py-0.5 rounded hover:bg-white hover:text-black">10%</button>
+                                    <button onclick="applyDiscount(15, event)" class="bg-[var(--bg-surface-3)] px-1.5 py-0.5 rounded hover:bg-white hover:text-black">15%</button>
+                                    <button onclick="applyDiscount(20, event)" class="bg-[var(--bg-surface-3)] px-1.5 py-0.5 rounded hover:bg-white hover:text-black">20%</button>
+                                </span>
+                            </label>
+                            <input type="number" id="inpPrice" value="3400" required class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="font-tech text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Additional Terms / Instructions</label>
+                        <textarea id="inpTerms" class="w-full mt-1 bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-colors min-h-[80px]">Standard Titan Cargo Terms and Conditions apply. Transit times are estimated.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex gap-4 no-print border-t border-[var(--bg-surface-2)] pt-6">
+                 <button class="flex-1 btn-surface h-12" onclick="markReview(currentQuoteId)">MARK FOR REVIEW</button>
+                 <button class="flex-1 btn-primary h-12 gap-2" onclick="approveAndPrintQuote()">
+                     <i class="ph ph-printer"></i>
+                     PRINT DOCUMENT & APPROVE
+                 </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let allQuotes = [];
+        let currentTab = 'PENDING';
+        let currentQuoteId = null;
+
+        function setTab(status, el) {
+            currentTab = status;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn font-tech text-sm tracking-widest uppercase px-4 py-2 text-[var(--text-secondary)] border-b-2 border-transparent';
+            });
+            el.className = 'tab-btn active font-tech text-sm tracking-widest uppercase px-4 py-2 text-[var(--status-warn)] border-b-2 border-[var(--status-warn)]';
+            renderQuotes();
+        }
+
         async function fetchQuotes() {
             const container = document.getElementById('quotes-container');
             const token = localStorage.getItem('token');
             if (!token) {
-                container.innerHTML = '<div class="text-[var(--status-err)] text-sm">Authentication required to view quotes.</div>';
+                container.innerHTML = '<tr><td colspan="5" class="p-6 text-[var(--status-err)] text-sm text-center">Authentication required.</td></tr>';
                 return;
             }
 
@@ -611,52 +567,190 @@
                 });
                 const data = await res.json();
                 
-                if (!res.ok) {
-                    container.innerHTML = `<div class="text-[var(--status-err)] text-sm">${data.error || 'Failed to load quotes'}</div>`;
-                    return;
+                if (res.ok && data.quotes) {
+                    allQuotes = data.quotes;
+                    renderQuotes();
+                } else {
+                    container.innerHTML = `<tr><td colspan="5" class="p-6 text-[var(--status-err)] text-sm text-center">${data.error || 'Failed'}</td></tr>`;
                 }
-
-                if (!data.quotes || data.quotes.length === 0) {
-                    container.innerHTML = '<div class="text-[var(--text-secondary)] text-sm">No quote requests found.</div>';
-                    return;
-                }
-
-                container.innerHTML = data.quotes.map(q => `
-                    <div class="glass-panel p-4 rounded-xl flex items-center justify-between gap-4 border border-[var(--bg-surface-3)]">
-                        <div class="flex flex-col gap-1">
-                            <div class="flex gap-2 items-center">
-                                <span class="font-bold text-sm">#${q.id}</span>
-                                <span class="system-badge bg-[var(--${q.status === 'APPROVED' ? 'status-good' : 'status-warn'})] bg-opacity-20 text-[var(--${q.status === 'APPROVED' ? 'status-good' : 'status-warn'})]">${q.status}</span>
-                            </div>
-                            <div class="text-xs text-[var(--text-secondary)]">${q.origin} → ${q.destination} (${q.cargo_type}, ${q.weight_kg ? q.weight_kg+'kg' : 'N/A'})</div>
-                            <div class="text-xs font-mono text-[var(--text-tech)]">${q.contact_email}</div>
-                        </div>
-                        <div>
-                            ${q.status === 'PENDING' ? `<button class="btn-primary h-8 px-4 text-xs font-tech" onclick="approveQuote(${q.id})">APPROVE</button>` : ''}
-                        </div>
-                    </div>
-                `).join('');
             } catch (err) {
-                container.innerHTML = '<div class="text-[var(--status-err)] text-sm">Network error while fetching quotes.</div>';
+                container.innerHTML = '<tr><td colspan="5" class="p-6 text-[var(--status-err)] text-sm text-center">Network error</td></tr>';
             }
         }
 
-        async function approveQuote(id) {
-            const token = localStorage.getItem('token');
+        function renderQuotes() {
+            const container = document.getElementById('quotes-container');
+            // Mock logic: Treat PENDING as NOT APPROVED, and PASSED as APPROVED.
+            const isApproved = (currentTab === 'PASSED');
+            const reviewMode = (currentTab === 'REVIEW');
+            
+            const filtered = allQuotes.filter(q => {
+                if (reviewMode) return q.status === 'REVIEW';
+                if (isApproved) return q.status === 'APPROVED';
+                return q.status === 'PENDING';
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<tr><td colspan="5" class="p-6 text-[var(--text-secondary)] text-sm text-center font-mono py-12">No requests in this view.</td></tr>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(q => {
+                const color = q.status === 'APPROVED' ? 'status-good' : 'status-warn';
+                return `
+                <tr class="border-b border-[var(--bg-surface-2)] hover:bg-[var(--bg-surface-2)] transition-colors group cursor-pointer" onclick='openConfigureModal(${JSON.stringify(q).replace(/'/g, "&#39;")})'>
+                    <td class="p-6">
+                        <div class="font-bold text-sm">QT-${q.id}</div>
+                        <div class="font-tech text-[10px] text-[var(--text-tech)]">${new Date(q.created_at).toLocaleDateString()}</div>
+                    </td>
+                    <td class="p-6 text-sm">
+                        <div class="font-medium">${q.origin} → ${q.destination}</div>
+                        <div class="text-[11px] text-[var(--text-secondary)] mt-1">${q.cargo_type} - ${q.weight_kg}kg</div>
+                    </td>
+                    <td class="p-6 text-sm font-mono text-[var(--text-secondary)]">
+                        $<span class="estimated-cost" data-id="${q.id}">${3400 + (q.id * 123 % 5000)}</span>
+                    </td>
+                    <td class="p-6">
+                        <span class="system-badge bg-[var(--${color})] bg-opacity-20 text-[var(--${color})]">${q.status || 'PENDING'}</span>
+                    </td>
+                    <td class="p-6 text-right flex gap-2 justify-end">
+                        ${ q.status !== 'REVIEW' && q.status !== 'APPROVED' ? `<button onclick="markReview(${q.id}, event)" class="w-8 h-8 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center text-[var(--status-warn)] hover:bg-[var(--status-warn)] hover:text-black transition-all" title="Mark for Review"><i class="ph ph-magnifying-glass text-lg"></i></button>` : ''}
+                        ${ q.status === 'REVIEW' && !isApproved ? `<button onclick="markReview(${q.id}, event)" class="w-8 h-8 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center text-[var(--status-warn)] hover:bg-[var(--status-warn)] hover:text-black transition-all" title="In Review"><i class="ph ph-magnifying-glass text-lg"></i></button>` : ''}
+                        
+                        <button class="w-8 h-8 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--bg-accent)] hover:text-[var(--text-accent)] transition-all">
+                            <i class="ph ph-gear text-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        function openConfigureModal(q) {
+            currentQuoteId = q.id;
+            document.getElementById('modalQuoteTitle').innerText = 'Quote QT-' + q.id;
+            document.getElementById('modalQuoteEmail').innerText = q.contact_email;
+            document.getElementById('modalOrigin').innerText = q.origin;
+            document.getElementById('modalDestination').innerText = q.destination;
+            document.getElementById('modalCargo').innerText = q.cargo_type + ' / ' + q.weight_kg + 'kg';
+            
+            // Re-calc mock cost from the table
+            const mockCost = 3400 + (q.id * 123 % 5000);
+            document.getElementById('modalCost').innerText = '$' + mockCost.toFixed(2);
+            document.getElementById('inpPrice').value = mockCost;
+            document.getElementById('inpPrice').dataset.original = mockCost;
+
+            const modal = document.getElementById('quoteModal');
+            const content = document.getElementById('quoteModalContent');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeQuoteModal() {
+            const modal = document.getElementById('quoteModal');
+            const content = document.getElementById('quoteModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        async function approveAndPrintQuote() {
+            const vessel = document.getElementById('selVessel').value;
+            const price = document.getElementById('inpPrice').value;
+            const terms = document.getElementById('inpTerms').value;
+            
+            const printArea = document.getElementById('print-area');
+            const newValues = document.createElement('div');
+            newValues.innerHTML = `
+                <div class="grid grid-cols-2 gap-6 p-6 rounded-2xl bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] mt-6">
+                    <div>
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Assigned Vessel</p>
+                        <p class="text-lg font-medium">${vessel}</p>
+                    </div>
+                    <div>
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Final Quote (USD)</p>
+                        <p class="text-lg font-medium">$${price}</p>
+                    </div>
+                    <div class="col-span-2">
+                        <p class="font-tech text-[10px] text-[var(--text-secondary)] uppercase">Terms & Instructions</p>
+                        <p class="text-md">${terms}</p>
+                    </div>
+                </div>
+            `;
+            printArea.appendChild(newValues);
+
+            const noPrintElements = document.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.style.display = 'none');
+
+            const modalContent = document.getElementById('quoteModalContent');
+            modalContent.classList.remove('max-h-[90vh]', 'overflow-y-auto'); // Prevent clipping in PDF
+
+            const style = document.createElement('style');
+            style.innerHTML = '.glass-panel { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background-color: #0d0f14 !important; border-color: rgba(255,255,255,0.1) !important; color: white !important; }';
+            document.head.appendChild(style);
+
+            const opt = {
+                margin:       10,
+                filename:     'Titan_Cargo_Quote_QT-' + currentQuoteId + '.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            await html2pdf().set(opt).from(modalContent).save();
+
+            noPrintElements.forEach(el => el.style.display = '');
+            modalContent.classList.add('max-h-[90vh]', 'overflow-y-auto');
+            newValues.remove();
+            style.remove();
+
             try {
-                const res = await fetch(`/api/quotes/${id}/approve`, {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`/api/quotes/${currentQuoteId}/approve`, {
                     method: 'PATCH',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                const data = await res.json();
-                if (res.ok) {
-                    alert('Quote #'+id+' approved!');
+                if(res.ok) {
+                    alert('Quote Approved & Project Instantiated Successfully!');
+                    closeQuoteModal();
                     fetchQuotes();
                 } else {
-                    alert('Error: ' + data.error);
+                    alert('Failed to approve on backend.');
                 }
             } catch (err) {
-                alert('Network error');
+                console.error(err);
+                alert('Network error during approval.');
+            }
+        }
+
+        async function markReview(id, e) {
+            if(e) e.stopPropagation();
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`/api/quotes/${id}/review`, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if(res.ok) {
+                    alert('Quote pushed to REVIEW queue.');
+                    closeQuoteModal();
+                    fetchQuotes();
+                } else {
+                    alert('Failed to mark for review on backend.');
+                }
+            } catch (err) {
+                alert('Network error.');
+            }
+        }
+
+        function applyDiscount(pct, e) {
+            e.preventDefault();
+            const inp = document.getElementById('inpPrice');
+            const orig = parseFloat(inp.dataset.original);
+            if(orig && !isNaN(orig)) {
+                inp.value = (orig * (1 - (pct/100))).toFixed(2);
             }
         }
 

@@ -480,15 +480,21 @@
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<i class="ph ph-spinner text-lg"></i> <span class="font-tech text-xs">GENERATING...</span>';
             const element = document.getElementById('reportContentArea');
+
+            const style = document.createElement('style');
+            style.innerHTML = '.glass-panel, .builder-item { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background-color: #0d0f14 !important; border-color: rgba(255,255,255,0.1) !important; color: white !important; }';
+            document.head.appendChild(style);
+
             const opt = {
                 margin:       [0.5, 0.5, 0.5, 0.5],
                 filename:     'Titan_Cargo_Analytics_Report.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#030407' },
+                html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'in', format: 'tabloid', orientation: 'landscape' }
             };
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.innerHTML = originalContent;
+                style.remove();
             });
         };
     </script>

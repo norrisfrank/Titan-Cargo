@@ -294,9 +294,9 @@
                             <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tech)]"></i>
                             <input type="text" id="projectSearch" placeholder="Search projects..." class="bg-[var(--bg-surface-2)] border border-[var(--bg-surface-3)] rounded-full py-2 pl-9 pr-4 text-xs font-tech focus:outline-none focus:border-[var(--text-secondary)] w-64 transition-all focus:w-80">
                         </div>
-                        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3">
+                        <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3" onclick="cycleSort()" style="cursor: pointer;">
                             <span class="text-xs text-[var(--text-secondary)]">Sort:</span>
-                            <span class="text-sm font-medium">Priority</span>
+                            <span class="text-sm font-medium" id="sortLabel">Priority</span>
                             <i class="ph ph-caret-down text-xs opacity-50"></i>
                         </div>
                     </div>
@@ -350,6 +350,44 @@
                 </div>
                 <button type="submit" class="w-full btn-primary h-12 mt-4">INITIALIZE PROJECT</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal -->
+    <div id="projectDetailsModal" style="display: none;" class="fixed inset-0 z-[100] items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeProjectModal()"></div>
+        <div class="relative w-full max-w-lg glass-panel rounded-3xl p-8 transform transition-transform duration-300 scale-95 opacity-0 inline-flex flex-col" id="projectDetailsModalContent">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="system-badge mb-3">PROJECT.DETAILS</div>
+                    <h3 class="text-2xl font-semibold tracking-tight" id="modalProjectName">Project Name</h3>
+                    <p class="text-sm text-[var(--text-tech)] font-tech mt-1" id="modalProjectId">#0000</p>
+                </div>
+                <button onclick="closeProjectModal()" class="w-10 h-10 rounded-full bg-[var(--bg-surface-2)] flex items-center justify-center hover:bg-[var(--bg-surface-3)] transition-colors">
+                    <i class="ph-bold ph-x text-[var(--text-secondary)]"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4 font-mono text-sm mb-8">
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Status:</span>
+                    <span class="text-[var(--status-good)] font-bold" id="modalProjectStatus">STABLE</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Origin / Start:</span>
+                    <span class="text-[var(--text-primary)]" id="modalProjectOrigin">Unknown</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Cargo Focus:</span>
+                    <span class="text-[var(--text-primary)]" id="modalProjectCargo">GENERAL</span>
+                </div>
+                <div class="flex justify-between border-b border-[var(--bg-surface-3)] pb-2">
+                    <span class="text-[var(--text-secondary)]">Progress:</span>
+                    <span class="text-[var(--text-primary)]" id="modalProjectProgress">0%</span>
+                </div>
+            </div>
+
+            <button class="w-full btn-primary h-12" onclick="closeProjectModal()">ACKNOWLEDGE SYSTEM LOG</button>
         </div>
     </div>
 
@@ -559,7 +597,7 @@
                 }
                 
                 const card = `
-                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" onclick="console.log('Open project ${p.project_code}')">
+                    <div class="project-card rounded-[var(--radius-card)] p-8 flex flex-col gap-6" onclick='openProjectModal(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
                         <div class="flex justify-between items-start">
                             <div class="flex flex-col gap-1">
                                 <span class="font-tech text-[10px] text-[var(--text-tech)] tracking-widest">${p.project_code}</span>
@@ -611,11 +649,71 @@
             grid.insertAdjacentHTML('beforeend', createBtn);
         }
 
-        document.getElementById('projectSearch').addEventListener('keyup', (e) => {
-            const query = e.target.value.toLowerCase();
-            const filtered = allProjects.filter(p => p.name.toLowerCase().includes(query) || p.project_code.toLowerCase().includes(query) || p.origin.toLowerCase().includes(query));
+        // Sorting Logic
+        let currentSort = 'Priority';
+        const sortOptions = ['Priority', 'Name', 'Status'];
+
+        function cycleSort() {
+            const idx = sortOptions.indexOf(currentSort);
+            currentSort = sortOptions[(idx + 1) % sortOptions.length];
+            document.getElementById('sortLabel').innerText = currentSort;
+            applyFiltersAndRender();
+        }
+
+        function applyFiltersAndRender() {
+            const query = document.getElementById('projectSearch').value.toLowerCase();
+            let filtered = allProjects.filter(p => p.name.toLowerCase().includes(query) || p.project_code.toLowerCase().includes(query) || (p.origin && p.origin.toLowerCase().includes(query)));
+            
+            if (currentSort === 'Name') {
+                filtered.sort((a,b) => a.name.localeCompare(b.name));
+            } else if (currentSort === 'Status') {
+                filtered.sort((a,b) => a.status.localeCompare(b.status));
+            } else {
+                // Priority (delay/critical first)
+                const pVal = (s) => (s==='CRITICAL'?3: (s==='DELAYED'?2:1));
+                filtered.sort((a,b) => pVal(b.status) - pVal(a.status));
+            }
             renderProjects(filtered);
-        });
+        }
+
+        document.getElementById('projectSearch').addEventListener('keyup', applyFiltersAndRender);
+
+        // Project Modal Info Logic
+        function openProjectModal(p) {
+            document.getElementById('modalProjectName').innerText = p.name;
+            document.getElementById('modalProjectId').innerText = p.project_code;
+            document.getElementById('modalProjectStatus').innerText = p.status;
+            document.getElementById('modalProjectOrigin').innerText = p.origin || 'Unknown';
+            document.getElementById('modalProjectCargo').innerText = p.cargo_type || '--';
+            document.getElementById('modalProjectProgress').innerText = p.progress + '%';
+
+            // change color based on status
+            const statusEl = document.getElementById('modalProjectStatus');
+            const colorMap = {
+                'ON TRACK': 'var(--status-good)',
+                'DELAYED': 'var(--status-warn)',
+                'CRITICAL': 'var(--status-err)',
+                'STABLE': 'var(--status-good)',
+                'INITIALIZING': 'var(--text-tech)'
+            };
+            statusEl.style.color = colorMap[p.status] || 'var(--text-primary)';
+
+            const modal = document.getElementById('projectDetailsModal');
+            const content = document.getElementById('projectDetailsModalContent');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('projectDetailsModal');
+            const content = document.getElementById('projectDetailsModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
 
         // Wire Create Buttons
         const createBtns = document.querySelectorAll('button:has(.ph-plus)');

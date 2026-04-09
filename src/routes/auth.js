@@ -17,7 +17,7 @@ async function findUserByEmail(email) {
 }
 
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body || {};
+  const { name, email, password, role, pin } = req.body || {};
 
   if (!isNonEmptyString(name, 2) || !isValidEmail(email) || !isNonEmptyString(password, 8)) {
     return res.status(400).json({
@@ -38,9 +38,13 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ error: 'User already exists' });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const userRole = role === 'ADMIN' ? 'ADMIN' : 'CLIENT';
 
-    const role = req.body.role === 'ADMIN' ? 'ADMIN' : 'CLIENT';
+    if (userRole === 'ADMIN' && pin !== '805711') {
+      return res.status(401).json({ error: 'Security Exception: Invalid Admin Access PIN' });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const insert = await query(
       `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision)
@@ -73,7 +77,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body || {};
+  const { email, password, pin } = req.body || {};
 
   if (!isValidEmail(email) || !isNonEmptyString(password, 1)) {
     return res.status(400).json({ error: 'email and password are required' });
@@ -91,6 +95,10 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    if ((user.role === 'ADMIN' || user.role === 'OPERATIONS') && pin !== '805711') {
+      return res.status(401).json({ error: 'Security Exception: Invalid Admin Access PIN' });
+    }
+
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
       JWT_SECRET,
@@ -103,6 +111,50 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ error: 'Failed to login' });
+  }
+});
+
+router.post('/google-mock', async (req, res) => {
+  const email = req.body.email || 'demo.workspace@acme.corp';
+  const name = req.body.name || 'Demo User';
+  
+  try {
+    let user = await findUserByEmail(email);
+
+    if (!user) {
+      // Register mock user
+      const role = req.body.role === 'ADMIN' ? 'ADMIN' : 'CLIENT';
+      const passwordHash = await bcrypt.hash('google_oauth_mock_pass_123', 10);
+      
+      const insert = await query(
+        `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)
+         RETURNING id, name, email, role, photo_url AS "photoUrl", skills, vision`,
+        [
+          name,
+          email,
+          passwordHash,
+          role,
+          'https://randomuser.me/api/portraits/lego/1.jpg',
+          'Google SSO Integrated User',
+          'Automated SSO Provisioning'
+        ]
+      );
+      user = insert.rows[0];
+    } else {
+      delete user.passwordHash;
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    return res.json({ token, user });
+  } catch (err) {
+    console.error('Google mock error:', err);
+    return res.status(500).json({ error: 'Failed to authenticate with Google' });
   }
 });
 

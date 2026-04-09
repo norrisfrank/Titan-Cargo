@@ -282,9 +282,6 @@
                     <button onclick="window.location.href='login.html'" class="btn-primary font-tech text-xs tracking-wider">
                         GET INSTANT QUOTE <i class="ph-bold ph-arrow-right ml-2 text-base"></i>
                     </button>
-                    <button onclick="window.location.href='tracking.html'" class="btn-surface font-tech text-xs tracking-wider" vid="41">
-                        TRACK SHIPMENT <i class="ph ph-crosshair ml-2 text-base text-[var(--text-cyan)]" vid="42"></i>
-                    </button>
                 </div>
 
                 <div class="mt-16 flex items-center gap-6" vid="43">
@@ -519,8 +516,8 @@
                     </li>
                 </ul>
 
-                <button onclick="window.location.href='tracking.html'" class="btn-primary w-fit font-tech text-xs tracking-wider" vid="176">
-                    EXPLORE REGIONAL HUB <i class="ph-bold ph-map-trifold ml-2 text-base" vid="177"></i>
+                <button onclick="openInfoModal('East Africa Regional Hubs', 'Our extensive ground network integrates directly with regional customs authorities. Real-time border transit tracking, multi-modal handover points, and specialized cold-chain operations are currently rolling out.', 'ph-bold ph-map-trifold')" class="btn-primary w-fit font-tech text-xs tracking-wider">
+                    EXPLORE REGIONAL HUB <i class="ph-bold ph-map-trifold ml-2 text-base"></i>
                 </button>
             </div>
         </div>
@@ -554,9 +551,9 @@
             <div vid="190">
                 <h2 class="text-3xl font-medium mb-4" vid="191">Ready to optimize your supply chain?</h2>
                 <p class="text-[var(--text-secondary)] text-sm mb-6" vid="192">Initialize your setup sequence with our routing experts.</p>
-                <div class="flex gap-4" vid="193">
-                    <button onclick="window.location.href='quote.html'" class="btn-primary font-tech text-xs tracking-wider" vid="194">START SETUP</button>
-                    <button onclick="window.location.href='tracking.html'" class="btn-surface font-tech text-xs tracking-wider" vid="195">API DOCS</button>
+                <div class="flex gap-4">
+                    <button onclick="window.location.href='login.html'" class="btn-primary font-tech text-xs tracking-wider">START SETUP</button>
+                    <button onclick="openInfoModal('Developer API', 'Integrate Titan Cargo\'s logistics engine directly into your enterprise ERP. The comprehensive REST API will provide automated quoting, booking orchestration, and webhook-driven tracking.', 'ph-bold ph-code')" class="btn-surface font-tech text-xs tracking-wider">API DOCS</button>
                 </div>
             </div>
             
@@ -798,18 +795,18 @@
             midPoint.normalize().multiplyScalar(RADIUS + distance * heightOffset);
 
             const curve = new THREE.QuadraticBezierCurve3(start, midPoint, end);
-            
-            
             const points = curve.getPoints(50);
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
-            const material = new THREE.LineBasicMaterial({ 
-                color: startKey === 'mombasa' ? 0x00E5FF : 0x4A88FF, 
+            const routeGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+            const routeMaterial = new THREE.LineBasicMaterial({ 
+                color: 0x00E5FF, 
                 transparent: true, 
-                opacity: 0.3,
-                blending: THREE.AdditiveBlending
+                opacity: 0.15 
             });
-            const line = new THREE.Line(geometry, material);
-            globeGroup.add(line);
+
+            const routeLine = new THREE.Line(routeGeometry, routeMaterial);
+            globeGroup.add(routeLine);
+            arcs.push(routeLine);
 
             
             const vesselMesh = new THREE.Mesh(vesselGeo, vesselMat);
@@ -818,24 +815,19 @@
                 mesh: vesselMesh,
                 curve: curve,
                 progress: Math.random(), 
-                speed: 0.001 + (Math.random() * 0.002) 
+                speed: 0.001 + Math.random() * 0.002 
             });
         }
 
         
-        createRoute('mombasa', 'dar', 0.1);
-        createRoute('mombasa', 'kampala', 0.15);
-        createRoute('mombasa', 'kigali', 0.15);
-        createRoute('mombasa', 'addis', 0.15);
-        createRoute('mombasa', 'mogadishu', 0.1);
-        createRoute('mombasa', 'dubai', 0.2);
-        createRoute('mombasa', 'mumbai', 0.25);
-        createRoute('mombasa', 'rotterdam', 0.3);
-        createRoute('mombasa', 'johannesburg', 0.2);
-        
-        
-        createRoute('dar', 'johannesburg', 0.15);
-        createRoute('dubai', 'mumbai', 0.1);
+        createRoute('mombasa', 'kigali');
+        createRoute('mombasa', 'kampala');
+        createRoute('mombasa', 'dar');
+        createRoute('mombasa', 'addis');
+        createRoute('mombasa', 'dubai');
+        createRoute('mombasa', 'mumbai');
+        createRoute('mombasa', 'rotterdam');
+        createRoute('johannesburg', 'mombasa');
 
         
         
@@ -903,9 +895,52 @@
             
             globeGroup.rotation.x += (mouseY * 0.1 - globeGroup.rotation.x) * 0.05;
             
-            
         });
 
     </script>
 
+    <!-- Info Modal -->
+    <div id="infoModal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 hidden">
+        <div class="relative w-full max-w-lg mx-4 glass-panel rounded-2xl p-8 border border-[var(--text-cyan)] border-opacity-30 shadow-[0_0_30px_rgba(0,229,255,0.1)] transform scale-95 transition-transform duration-300">
+            <button onclick="closeInfoModal()" class="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-white transition-colors">
+                <i class="ph-bold ph-x text-xl"></i>
+            </button>
+            <div id="infoModalIcon" class="w-12 h-12 rounded-xl bg-[var(--bg-accent-dim)] border border-[var(--text-cyan)] border-opacity-30 flex items-center justify-center mb-6 shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+                <i class="ph-bold ph-info text-2xl text-[var(--text-cyan)]"></i>
+            </div>
+            <h3 id="infoModalTitle" class="text-2xl font-medium mb-2 tracking-tight">Title</h3>
+            <p id="infoModalDesc" class="text-[var(--text-secondary)] text-sm mb-8 leading-relaxed">Description goes here.</p>
+            <div class="flex justify-between items-center pt-6 border-t border-[var(--bg-surface-2)]">
+                <div class="system-badge bg-black/50">STATUS // <span class="text-yellow-400">COMING SOON</span></div>
+                <button onclick="closeInfoModal()" class="btn-surface h-10 px-6 font-tech text-xs tracking-wider border-none bg-[var(--bg-surface-2)] hover:bg-[var(--bg-surface-3)]">DISMISS</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openInfoModal(title, desc, iconNode) {
+            const modal = document.getElementById('infoModal');
+            document.getElementById('infoModalTitle').textContent = title;
+            document.getElementById('infoModalDesc').innerHTML = desc;
+            if(iconNode) {
+                document.getElementById('infoModalIcon').innerHTML = `<i class="${iconNode} text-2xl text-[var(--text-cyan)]"></i>`;
+            }
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.querySelector('.glass-panel').classList.remove('scale-95');
+                modal.querySelector('.glass-panel').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeInfoModal() {
+            const modal = document.getElementById('infoModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.glass-panel').classList.remove('scale-100');
+            modal.querySelector('.glass-panel').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
 </body></html>

@@ -70,9 +70,36 @@ router.patch('/:id/approve', requireAuth, async (req, res) => {
             ['APPROVED', req.params.id]
         );
         if (result.rowCount === 0) return res.status(404).json({ error: 'Quote not found' });
-        res.json({ success: true, quote: result.rows[0] });
+        
+        const quote = result.rows[0];
+        const projectCode = 'PRJ-' + Math.floor(1000 + Math.random() * 9000);
+        const projectName = `Freight: ${quote.origin} -> ${quote.destination}`;
+        
+        await query(
+            `INSERT INTO projects (project_code, name, status, origin, cargo_type, progress, team_members)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [projectCode, projectName, 'INITIALIZING', quote.origin, quote.cargo_type, 0, '[]']
+        );
+
+        res.json({ success: true, quote });
     } catch (err) {
         res.status(500).json({ error: 'Failed to approve quote' });
+    }
+});
+
+router.patch('/:id/review', requireAuth, async (req, res) => {
+    if (req.user.role !== 'ADMIN' && req.user.role !== 'OPERATIONS') {
+        return res.status(403).json({ error: 'Access denied' });
+    }
+    try {
+        const result = await query(
+            'UPDATE quote_requests SET status = $1 WHERE id = $2 RETURNING *',
+            ['REVIEW', req.params.id]
+        );
+        if (result.rowCount === 0) return res.status(404).json({ error: 'Quote not found' });
+        res.json({ success: true, quote: result.rows[0] });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to mark review' });
     }
 });
 
