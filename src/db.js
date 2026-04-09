@@ -25,4 +25,16 @@ pool.on('error', (err) => {
 
 const query = (text, params) => pool.query(text, params);
 
+// Auto-migrate schema changes to handle deployed DB instances automatically
+const migrateDb = async () => {
+  try {
+    await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS skills TEXT;`);
+    await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS vision TEXT;`);
+    console.log('[DB] Users table schema verified successfully.');
+  } catch (err) {
+    console.error('[DB MIGRATION WARNING] Failed to verify/alter users table:', err.message);
+  }
+};
+migrateDb();
+
 module.exports = { pool, query };
