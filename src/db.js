@@ -28,8 +28,33 @@ const query = (text, params) => pool.query(text, params);
 // Auto-migrate schema changes to handle deployed DB instances automatically
 const migrateDb = async () => {
   try {
+    await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS photo_url TEXT;`);
     await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS skills TEXT;`);
     await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS vision TEXT;`);
+    
+    // Also ensure projects table exists and has new columns from Quote Approval logic
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id SERIAL PRIMARY KEY,
+        project_code VARCHAR(50),
+        name VARCHAR(255),
+        status VARCHAR(50),
+        origin VARCHAR(255),
+        cargo_type VARCHAR(100),
+        progress INTEGER DEFAULT 0,
+        team_members JSONB DEFAULT '[]',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    
+    await pool.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS origin VARCHAR(255);`);
+    await pool.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS cargo_type VARCHAR(100);`);
+    await pool.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS progress INTEGER DEFAULT 0;`);
+    await pool.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS team_members JSONB DEFAULT '[]';`);
+    
+    // Ensure quote_requests has status column
+    await pool.query(`ALTER TABLE quote_requests ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'PENDING';`);
+    
     console.log('[DB] Users table schema verified successfully.');
   } catch (err) {
     console.error('[DB MIGRATION WARNING] Failed to verify/alter users table:', err.message);
