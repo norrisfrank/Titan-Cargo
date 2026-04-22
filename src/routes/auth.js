@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 
 async function findUserByEmail(email) {
   const result = await query(
-    'SELECT id, name, email, password_hash AS "passwordHash", role, photo_url AS "photoUrl", skills, vision FROM users WHERE email = $1 LIMIT 1',
+    'SELECT id, name, email, password_hash AS "passwordHash", role, photo_url AS "photoUrl", skills, vision, projects FROM users WHERE email = $1 LIMIT 1',
     [email]
   );
   return result.rows[0] || null;
@@ -47,17 +47,18 @@ router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     const insert = await query(
-      `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision)
-       VALUES ($1,$2,$3,$4,$5,$6,$7)
-       RETURNING id, name, email, role, photo_url AS "photoUrl", skills, vision`,
+      `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision, projects)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       RETURNING id, name, email, role, photo_url AS "photoUrl", skills, vision, projects`,
       [
         name,
         email,
         passwordHash,
-        role,
+        userRole,
         'https://randomuser.me/api/portraits/men/44.jpg',
         'Logistics Management, Supply Chain Optimization, Secure Transport, Team Leadership, Data Analytics, Client Relations',
         'To transform Titan Cargo into the most trusted, innovative, and secure logistics partner in the world, delivering excellence for every client and every shipment.',
+        JSON.stringify([])
       ]
     );
 
@@ -127,9 +128,9 @@ router.post('/google-mock', async (req, res) => {
       const passwordHash = await bcrypt.hash('google_oauth_mock_pass_123', 10);
       
       const insert = await query(
-        `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision)
-         VALUES ($1,$2,$3,$4,$5,$6,$7)
-         RETURNING id, name, email, role, photo_url AS "photoUrl", skills, vision`,
+        `INSERT INTO users (name, email, password_hash, role, photo_url, skills, vision, projects)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+         RETURNING id, name, email, role, photo_url AS "photoUrl", skills, vision, projects`,
         [
           name,
           email,
@@ -137,7 +138,8 @@ router.post('/google-mock', async (req, res) => {
           role,
           'https://randomuser.me/api/portraits/lego/1.jpg',
           'Google SSO Integrated User',
-          'Automated SSO Provisioning'
+          'Automated SSO Provisioning',
+          JSON.stringify([])
         ]
       );
       user = insert.rows[0];

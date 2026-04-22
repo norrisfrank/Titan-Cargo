@@ -14,7 +14,7 @@ if (process.env.DATABASE_URL) {
     host: process.env.PGHOST || 'localhost',
     port: process.env.PGPORT ? Number(process.env.PGPORT) : 5432,
     user: process.env.PGUSER || 'postgres',
-    password: process.env.PGPASSWORD || '',
+    password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE || 'titan_db',
   });
 }
@@ -31,6 +31,7 @@ const migrateDb = async () => {
     await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS photo_url TEXT;`);
     await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS skills TEXT;`);
     await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS vision TEXT;`);
+    await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS projects JSONB DEFAULT '[]';`);
     
     // Also ensure projects table exists and has new columns from Quote Approval logic
     await pool.query(`
